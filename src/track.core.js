@@ -34,11 +34,13 @@ function track() {
     // now do the sound stuff.
     self._makeNote(nextTick);
   });
-  self._attachSequencers(self._beatPattern);
+  self._addScheduler(self._beatPattern);
 
 
   // here's some neatly packaged default functionality.
   // this would be a good example for third-party extensions.
+  // in track.api.js you'll find that many of the api
+  // calls are calling Sequencer.set() internally.
 
   // ---------------------------------------------------
   // keep track of the osc type and... sequence it???

@@ -68,7 +68,7 @@ t.beat(4).notes(69, 67, 60)
 
 Tracks are monophonic. Since we supplied three notes, they will play one at a time, looping back to the beginning when they reach the end. There's no limit to the number of notes you can have in a pattern.
 
-Patterns are self-contained and do not rely on each other, allowing us to play with patterns of different lengths:
+Patterns for each parameter are self-contained and do not rely on each other, allowing us to play with patterns of different lengths:
 
 ```javascript
 t = new track()

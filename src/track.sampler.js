@@ -47,6 +47,12 @@ track.prototype._makeSampler = function(noteStart, noteEnd) {
 }
 
 
+// We want to support multiple samples per track,
+// so we wrap all of a sample's functionality into
+// a nice package called Sample. check out
+// track.select() in track.api.js, where we keep
+// a reference to one sample at a time so we know
+// which one to apply the edits to.
 
 function Sample(buffer) {
   var self = this;
