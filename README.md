@@ -1,4 +1,4 @@
-<img src="https://raw.github.com/kylestetz/lissajous/master/environment/images/lissajous-repo-logo.png" />
+<img src="https://raw.github.com/kylestetz/lissajous/master/environment/images/lissajous-repo-logo.jpg" />
 
 ## Lissajous
 
