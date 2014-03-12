@@ -1,6 +1,18 @@
 @font-face {
-    font-family: 'mission_gothicregular_italic';
-    src: url('mission_gothic_regular_italic-webfont.ttf') format('truetype');
+    font-family: 'lektonbold';
+    src: url('lekton-bold-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'lektonitalic';
+    src: url('lekton-italic-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'lektonregular';
+    src: url('lekton-regular-webfont.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -12,8 +24,8 @@
 
 body
 {
-  font-family: 'mission_gothicregular_italic', Menlo, 'Courier New', monospace;
-  font-size: 24px;
+  font-family: 'lektonregular', Menlo, 'Courier New', monospace;
+  font-size: 20px;
   letter-spacing: 1px;
   background-color: #ebebe5;
   margin: 0;
@@ -39,4 +51,9 @@ p
   margin: 0 auto;
   background-image: url('/environment/images/lissajous-logo.png');
   background-size: 730px 130px;
+}
+
+.give-me-some-space
+{
+  margin-top: 150px;
 }
