@@ -1,8 +1,17 @@
+<img src="https://raw.github.com/kylestetz/lissajous/master/environment/images/lissajous-repo-logo.png" />
+
 ## Lissajous
 
 Lissajous is a tool for real time audio performance using Javascript. It wraps succinct tools for creating oscillators and samplers into a chainable API, allowing performers to build and improvise songs with a minimum of code.
 
+#### Getting Started
 Play with Lissajous. Requires the latest stable Chrome build & a relatively recent OS.
+
+In order to run Lissajous locally you have to have a copy of the lissajous environment on your machine. Do this by pulling down this repo: `git clone git@github.com:kylestetz/lissajous.git` and opening the file `/environment/index.html`.
+
+#### [View the Performance API Documentation](https://github.com/kylestetz/lissajous/blob/master/API.md)
+
+#### This is what Lissajous looks like
 
 ```javascript
 // make a triangle wave that loops the notes 69, 67, then 60 in quarter note intervals
@@ -12,14 +21,19 @@ t.tri().beat(4).notes(69,67,60)
 // load a sample, set the beat to quarter notes, set the note length to a half measure,
 // set the envelope to give it a little attack and release, and loop the notes 69, 67, then 60
 s = new track()
-s.sample(buffer);
+s.sample(buffer)
 s.beat(4).nl(8).adsr(0.1,0,1,1).notes(69,67,60)
 
 // load an array of three AudioBuffers called 'drums', play them in 8th notes and give them
 // the sequence drums[0], drums[2], drums[1], drums[2]
 d = new track()
-d.sample(drums);
+d.sample(drums)
 d.beat(2).sseq(0,2,1,2)
+
+// load a piano sample and mess it up real good
+p = new track()
+p.sample(pianoSample)
+p.beat(2).nl(2).speed(0.5).clamp(1/16).clshift(-1/16)
 ```
 
 #### Basic Concepts of Lissajous
@@ -106,7 +120,7 @@ t.clshift(-1/16)
 
 This project is made possible by a lot of people writing great articles and making great libraries. For the sake of completeness I have added several libraries to this repo.
 
-["A Tale of Two Clocks - Scheduling Web Audio with Precision"](http://www.html5rocks.com/en/tutorials/audio/scheduling/) by Chris Wilson (@cwilso)
-[Tuna.js](https://github.com/Dinahmoe/tuna) by @Dinahmoe
-The BufferLoader function from ["Getting Started with Web Audio API"](http://www.html5rocks.com/en/tutorials/webaudio/intro/) by Boris Smus
-[Recorder.js](https://github.com/mattdiamond/Recorderjs) by @mattdiamond
+- ["A Tale of Two Clocks - Scheduling Web Audio with Precision"](http://www.html5rocks.com/en/tutorials/audio/scheduling/) by Chris Wilson (@cwilso)
+- [Tuna.js](https://github.com/Dinahmoe/tuna) by @Dinahmoe
+- The BufferLoader function from ["Getting Started with Web Audio API"](http://www.html5rocks.com/en/tutorials/webaudio/intro/) by Boris Smus
+- [Recorder.js](https://github.com/mattdiamond/Recorderjs) by @mattdiamond

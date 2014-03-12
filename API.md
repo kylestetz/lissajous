@@ -1,9 +1,17 @@
-## A sequence-based API
+## A sequence-based performance API
 Many of the parameters of a track can be sequenced. A sequence is just a list of values- for example, if we wanted to make a sequence of notes, we would say `track.notes(64, 60, 62, 72)`... At every beat of the track the parameter would adopt the next value in the array, looping back around to 0 when it reaches the end.
 
 Functions with the `(sequencer)` tag accept any number of arguments. They also accept any number of arrays as arguments, which will be flattened automatically into one long array. Cool!
 
 To remove a sequence simply call the function with no arguments. For example, calling `track.notes()` will remove the sequence of notes.
+
+### `clock.tempo`
+The clock object is what makes the world of lissajous tick. Simply change clock.tempo and the clock will update to the new tempo immediately. Defaults to 120.
+
+```javascript
+clock.tempo = 120
+clock.tempo = 90
+```
 
 ### `track.beat(steps)` `(sequencer)`
 Tracks need a beat to generate sound. A beat is a step sequencer pattern expressed in 16th notes. It loops through its pattern indefinitely.
@@ -188,11 +196,32 @@ Sets the speed of the active sample. The amount is specified as a decimal where 
 
 Note that speed and pitch are tied together, so a slower sample will also be pitched lower.
 
+```javascript
+var t = new track()
+t.sample(mySample)
+t.beat(4).nl(4)
+t.speed(0.5)
+```
+
 ### `track.reverse()`
 Reverses the active sample.
 
+```javascript
+var t = new track()
+t.sample(mySample)
+t.beat(4).nl(4)
+t.reverse()
+```
+
 ### `track.root(note)`
 Sets the root note for the active sample using MIDI numbers (where 64 is middle C). This allows you to use `track.notes` to modulate the pitch (and speed) of the sample.
+
+```javascript
+var t = new track()
+t.sample(mySample)
+t.beat(4).nl(4)
+t.root(64).notes(64, 60, 76)
+```
 
 ### `track.render(length)` `experimental`
 Renders whatever's going on in your track to a sample, then resets the track to the length of the sample as seamlessly as it can. There is usually a small delay after recording, so timing is not perfect for this yet.
@@ -202,6 +231,20 @@ Calling this function with no arguments will render audio for the length of the 
 Calling this function with a `length` argument specifies how many 1/16th note steps you should record for.
 
 Note that effects do not shut off automatically when the track resets, although this will be coming soon.
+
+```javascript
+var t = new track()
+t.sample(mySample)
+t.beat(4, 2, 4, 2, 2, 2)
+t.render()
+```
+
+```javascript
+var t = new track()
+t.sample(mySample)
+t.beat(4)
+t.render(16) // render 16 beats (one measure in 4/4)
+```
 
 ### `track.render32(length)`
 Same as `track.render`, but it accepts a length in 1/32nd note steps.
