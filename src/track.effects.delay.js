@@ -18,7 +18,7 @@ track.prototype.delay = function(dtime, fb, level) {
 
       // make a sequencer for changing the feedback time
       self._delayFbSequencer = new Sequencer( function(value) {
-        self._delay.feedback.gain.value = value;q
+        self._delay.feedback.gain.value = value;
       });
 
       // make a wet level sequencer?
