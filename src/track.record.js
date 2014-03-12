@@ -15,7 +15,7 @@ track.prototype._render = function(renderLength, resolution) {
 
   // store a record instance
   self._recordInstance = new Recorder(self._destination, {
-    workerPath: '/js/vendor/recorderWorker.js',
+    workerPath: '/src/vendor/recorderWorker.js',
   });
 
   // attach a new event to the _beatPattern's onFirstNote callback,
