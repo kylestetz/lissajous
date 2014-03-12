@@ -15,7 +15,7 @@ body
   font-family: 'mission_gothicregular_italic', Menlo, 'Courier New', monospace;
   font-size: 24px;
   letter-spacing: 1px;
-  color: #4e8a97;
+  background-color: #ebebe5;
   margin: 0;
   padding: 0;
 }
@@ -34,9 +34,9 @@ p
 
 .logo
 {
-  width: 86px;
-  height: 100px;
-  margin: 60px auto;
-
-  background-image: url('/environment/images/lissajous_logo.svg');
+  width: 730px;
+  height: 130px;
+  margin: 0 auto;
+  background-image: url('/environment/images/lissajous-logo.png');
+  background-size: 730px 130px;
 }
