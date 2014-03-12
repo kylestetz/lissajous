@@ -195,6 +195,13 @@ Reverses the active sample.
 Sets the root note for the active sample using MIDI numbers (where 64 is middle C). This allows you to use `track.notes` to modulate the pitch (and speed) of the sample.
 
 ### `track.render(length)` `experimental`
-Renders
+Renders whatever's going on in your track to a sample, then resets the track to the length of the sample as seamlessly as it can. There is usually a small delay after recording, so timing is not perfect for this yet.
 
-track.render32
+Calling this function with no arguments will render audio for the length of the beat pattern; for example, if your beat is `track.beat(4, 2, 2)`, calling `track.render()` will render 4+2+2=8 1/16th notes of audio.
+
+Calling this function with a `length` argument specifies how many 1/16th note steps you should record for.
+
+Note that effects do not shut off automatically when the track resets, although this will be coming soon.
+
+### `track.render32(length)`
+Same as `track.render`, but it accepts a length in 1/32nd note steps.

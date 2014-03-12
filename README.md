@@ -1,4 +1,4 @@
-### LISSAJOUS
+## Lissajous
 
 Lissajous is a tool for real time audio performance using Javascript. It wraps succinct tools for creating oscillators and samplers into a chainable API, allowing performers to build and improvise songs with a minimum of code.
 
@@ -15,7 +15,7 @@ s = new track()
 s.sample(buffer);
 s.beat(4).nl(8).adsr(0.1,0,1,1).notes(69,67,60)
 
-// load an array of AudioBuffers called 'drums', play them in 8th notes and give them
+// load an array of three AudioBuffers called 'drums', play them in 8th notes and give them
 // the sequence drums[0], drums[2], drums[1], drums[2]
 d = new track()
 d.sample(drums);
@@ -28,7 +28,8 @@ A performance in the Chrome console using Lissajous takes place in the global na
 
 The key to making the most of Lissajous is to add scripts (e.g. `extras.js`) that load all of your samples into the environment on page load. A clever or ambitious performer might write some additional functions to coordinate changes, control transitions, or execute other group-oriented operations with style and grace. Sky's the limit.
 
-#### Every track has a step sequencer.
+
+### Every track has a step sequencer.
 
 Tracks make sound when they are given a beat. Here's the minimum needed to generate some sound:
 
@@ -78,4 +79,34 @@ t.beat(4).nl(4,2).notes(69, 67, 60)
 Here we toggle between a note length of 4 and 2 every time a note is hit, but we cycle through three different notes.
 
 
-#### Samples
+### Samples can be sliced and diced.
+
+Working with samples is simple in Lissajous. There are helper functions to get your samples loaded onto the page; check out `/environment/extras.js` for an example.
+
+```javascript
+var t = new track()
+t.sample(mySample)
+// play a beat every quarter note with a note length of 4/16th
+t.beat(4).nl(4)
+// clamp to the first 1/16th of the sample & loop that portion
+t.clamp(0, 1/16).loop(1)
+// shift the clamp points by -1/16th of the sample size every beat
+t.clshift(-1/16)
+```
+
+#### Todos
+- Add a filter effect with its own envelope
+- Allow for stereo mixing
+- Develop a technique that would make smooth LFOs possible
+- MIDI in/out
+- Audio In
+- sharing JS context across multiple machines
+
+### Special Thanks
+
+This project is made possible by a lot of people writing great articles and making great libraries. For the sake of completeness I have added several libraries to this repo.
+
+["A Tale of Two Clocks - Scheduling Web Audio with Precision"](http://www.html5rocks.com/en/tutorials/audio/scheduling/) by Chris Wilson (@cwilso)
+[Tuna.js](https://github.com/Dinahmoe/tuna) by @Dinahmoe
+The BufferLoader function from ["Getting Started with Web Audio API"](http://www.html5rocks.com/en/tutorials/webaudio/intro/) by Boris Smus
+[Recorder.js](https://github.com/mattdiamond/Recorderjs) by @mattdiamond
