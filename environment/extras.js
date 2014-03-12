@@ -19,7 +19,7 @@ function _rint(length, min, max) {
 
 
 // _m is for multiplicity. the first argument is the value,
-// the second arguments is the number of times you want to
+// the second argument is the number of times you want to
 // repeat it. e.g. `_m(4, 8)` produces [4, 4, 4, 4, 4, 4, 4, 4]
 // and `_m([0,1,2], 3)` produces [0, 1, 2, 0, 1, 2, 0, 1, 2].
 // the Lissajous API will combine multiple array arguments
@@ -36,3 +36,26 @@ function _m(value, iterations) {
   }
   return values;
 }
+
+var pno = [];
+loadSounds([
+    './samples/pianosong/piano1.wav',
+    './samples/pianosong/pianobass.wav',
+    './samples/pianosong/pianodoodle.wav',
+    './samples/pianosong/bass.wav',
+    './samples/pianosong/synth.wav',
+    './samples/pianosong/perc.wav'
+  ],
+  function(list) {
+    pno = list;
+});
+
+var drums = [];
+loadSounds([
+    './samples/drums/kick.wav',
+    './samples/drums/snare.wav',
+    './samples/drums/hat.wav'
+  ],
+  function(list) {
+    drums = list;
+});
