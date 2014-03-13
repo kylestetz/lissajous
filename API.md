@@ -37,7 +37,7 @@ t.vol(0.5, 0.6, 0.7, 0.8, 0.9, 1)
 ```
 
 ### `track.notes(notes)` `(sequencer)`
-`notes`: 0 - 127 (MIDI numbers)
+- `notes`: 0 - 127 (MIDI numbers)
 A sequence of notes to play. The notes are expressed in MIDI number, where 64 is middle C. When playing samples, the root note of the sample determines how the note numbers are interpreted. The root number for a sample can be changed using `track.root(number)`. The default root note for a sample is 69 (A above middle C).
 
 ```javascript
@@ -59,7 +59,7 @@ t.nl(4) // let the notes overlap by extending their length to 1/4 notes
 Same as `track.nl`, but expressed in 1/32nd note steps.
 
 ### `track.trans(amount)`
-`amount`: steps
+- `amount`: steps
 Translate the sequence of notes by a given amount expressed in MIDI numbers.
 
 ```javascript
@@ -248,3 +248,63 @@ t.render(16) // render 16 beats (one measure in 4/4)
 
 ### `track.render32(length)`
 Same as `track.render`, but it accepts a length in 1/32nd note steps.
+
+## There are some effects
+Effects are a proof of concept right now with more on the way. Call them with some parameters to turn them on, call them with no arguments to turn them off.
+
+Effects are chained in the order you bring them to life. Turning an effect off that was further up in the chain and turning it back on will put it at the end.
+
+### `track.delay(time [, feedback, level])`
+- `time`: 1/16th note steps
+- `feedback`: 0 - 1
+- `level`: 0 - 1 (and beyond)
+
+```javascript
+var t = new track()
+t.beat(4)
+t.delay(2, 0.5, 0.5)
+```
+
+#### `track.dtime(steps)` `(sequencer)`
+A sequencer for delay time.
+
+```javascript
+var t = new track()
+t.beat(4)
+t.delay(2, 0.5, 0.5)
+t.dtime(2, 1, 3)
+```
+
+#### `track.dfb(amounts)` `(sequencer)`
+A sequencer for delay feedback.
+
+```javascript
+var t = new track()
+t.beat(4)
+t.delay(2, 0.5, 0.5)
+t.dfb(2, 1, 3)
+```
+
+#### `track.dlevel(amount)` `(sequencer)`
+A sequencer for the delay level.
+
+```javascript
+var t = new track()
+t.beat(4)
+t.delay(2, 0.5, 0.5)
+t.dlevel(0.5, 0.4, 0.3, 0.2)
+```
+
+### `track.chorus(rate [, feedback, delay])`
+The chorus effect from [Tuna.js](https://github.com/Dinahmoe/tuna).
+
+- `rate`: frequency in Hz
+- `feedback`: 0 - 1
+- `delay`: 1/16th note steps
+
+### `track.tremolo(rate [, intensity, stereoPhase])`
+The tremolo effect from [Tuna.js](https://github.com/Dinahmoe/tuna).
+
+- `rate`: frequency in Hz
+- `intensity`: 0 - 1
+- `stereoPhase`: 0 - 180

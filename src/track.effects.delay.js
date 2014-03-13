@@ -5,7 +5,7 @@ track.prototype.delay = function(dtime, fb, level) {
       // remove the effect from the chain
       self._delayEffectIndex = self._removeFromChain(self._delayEffectIndex);
       // detach all sequencers
-      self._detachSequencers( self._delayDtimeSequencer, self._delayFbSequencer );
+      self._detachSequencers( self._delayDtimeSequencer, self._delayFbSequencer, self._delayLevelSequencer );
     }
   } else {
     if(self._delayEffectIndex == null) {
@@ -21,15 +21,18 @@ track.prototype.delay = function(dtime, fb, level) {
         self._delay.feedback.gain.value = value;
       });
 
-      // make a wet level sequencer?
+      // make a sequencer for changing the wet level
+      self._delayLevelSequencer = new Sequencer( function(value) {
+        self._delay.wetLevel.gain.value = value;
+      });
 
-      self._attachSequencers( self._delayDtimeSequencer, self._delayFbSequencer );
+      self._attachSequencers( self._delayDtimeSequencer, self._delayFbSequencer, self._delayLevelSequencer );
 
       self._delayEffectIndex = self._addToChain(self._delay.input, self._delay.output);
     } else {
       self._delayDtimeSequencer.set(dtime);
       self._delayFbSequencer.set(fb);
-      self._delay.wetLevel.gain.value = level;
+      self._delayLevelSequencer.set(level);
     }
   }
   return self;
@@ -53,7 +56,7 @@ track.prototype.dfb = function() {
   arguments = _parseArguments(arguments);
   if(self._delay) {
     if(arguments.length == 0) {
-      self._delayFbSequencer.set(0.25);
+      self._delayFbSequencer.set(0);
     } else {
       self._delayFbSequencer.set(arguments);
     }
@@ -63,11 +66,12 @@ track.prototype.dfb = function() {
 
 track.prototype.dlevel = function(level) {
   var self = this;
+  arguments = _parseArguments(arguments);
   if(self._delay) {
-    if(level) {
-      self._delay.wetLevel.gain.value = level;
+    if(arguments.length == 0) {
+      self._delayLevelSequencer.set(0);
     } else {
-      self._delay.wetLevel.gain.value = 0.5;
+      self._delayLevelSequencer.set(arguments);
     }
   }
   return self;

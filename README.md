@@ -124,3 +124,4 @@ This project is made possible by a lot of people writing great articles and maki
 - [Tuna.js](https://github.com/Dinahmoe/tuna) by @Dinahmoe
 - The BufferLoader function from ["Getting Started with Web Audio API"](http://www.html5rocks.com/en/tutorials/webaudio/intro/) by Boris Smus
 - [Recorder.js](https://github.com/mattdiamond/Recorderjs) by @mattdiamond
+- The Delay node from [JAM with Chrome - How we made the audio rock](http://www.html5rocks.com/en/tutorials/casestudies/jamwithchrome-audio/) by Oskar Eriksson
