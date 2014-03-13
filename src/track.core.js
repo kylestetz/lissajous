@@ -44,7 +44,7 @@ function track() {
 
   // ---------------------------------------------------
   // keep track of the osc type and... sequence it???
-  self._oscType = 0;
+  self._oscType = "sine";
   self._oscTypeSequencer = new Sequencer( function(value) {
     self._oscType = value;
   });

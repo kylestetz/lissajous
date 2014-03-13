@@ -84,5 +84,5 @@ var clock = new TimeSingleton();
 var master = new Master();
 
 clock.start();
-console.log('Lissajous has started up. If you can see this you might want to set the console to Error mode.');
+console.log('Lissajous has started up.');
 console.log('If you\'re new here, try making a new track: t = new track().');
