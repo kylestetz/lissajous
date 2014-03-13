@@ -7,7 +7,7 @@ Lissajous is a tool for real time audio performance using Javascript. It wraps s
 #### Getting Started
 [Play with Lissajous](http://lissajousjs.com). Requires the latest stable Chrome build & a relatively recent OS.
 
-In order to run Lissajous locally you have to have a copy of the lissajous environment on your machine. Do this by pulling down this repo: `git clone git@github.com:kylestetz/lissajous.git` and opening the file `/environment/index.html`.
+In order to run Lissajous locally you have to have a copy of the lissajous environment on your machine. Do this by pulling down this repo: `git clone git@github.com:kylestetz/lissajous.git` and opening the file `/environment/index.html`. The `/samples/` directory is ignored in this repo, so the samples will fail to load. Replace them with your own and update `/environment/extras.js`!
 
 #### [View the Performance API Documentation](https://github.com/kylestetz/lissajous/blob/master/API.md)
 
