@@ -12,10 +12,10 @@ Sequencer.prototype.set = function(arguments) {
   self.currentStep = 0;
 }
 
-Sequencer.prototype.next = function() {
+Sequencer.prototype.next = function(nextTick) {
   var self = this;
   if(self.pattern.length) {
-    self.callback(self.pattern[self.currentStep]);
+    self.callback(self.pattern[self.currentStep], nextTick);
     self.currentStep = ++self.currentStep % self.pattern.length;
   }
 }
