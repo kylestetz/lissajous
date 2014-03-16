@@ -23,12 +23,12 @@ function track() {
   self._beatPattern = new Scheduler( function(nextTick) {
     // hit next on all of the track's sequencers
     for(var i = 0; i < self._sequencers.length; i++) {
-      self._sequencers[i].next();
+      self._sequencers[i].next(nextTick);
     }
     // if the track has samples loaded, hit their sequencers too
     if(self._currentSample) {
       for(var i = 0; i < self._currentSample.sequencers.length; i++) {
-        self._currentSample.sequencers[i].next();
+        self._currentSample.sequencers[i].next(nextTick);
       }
     }
     // now do the sound stuff.
@@ -45,7 +45,7 @@ function track() {
   // ---------------------------------------------------
   // keep track of the osc type and... sequence it???
   self._oscType = "sine";
-  self._oscTypeSequencer = new Sequencer( function(value) {
+  self._oscTypeSequencer = new Sequencer( function(value, nextTick) {
     self._oscType = value;
   });
   self._attachSequencers(self._oscTypeSequencer);
@@ -112,10 +112,43 @@ function track() {
   });
   self._attachSequencers(self._currentSampleSequencer);
 
+  // ---------------------------------------------------             - FILTER ENV -
+  // ---------------------------------------------------             --------------
+
+  // we're establishing reasonable defaults for a filter
+  // envelope, but the filter won't be used unless
+  // one is invoked on the track
+  self._filterEnvAttack = 0;
+  self._filterEnvDecay = 0;
+  self._filterEnvSustain = 1;
+  self._filterEnvRelease = 0;
+
+  self._filterFrequency = null;
+  self._filterRes = null;
+
+  // this will hold the AudioParam that the
+  // envelope will be modulating
+  self._filterEnvParam = null;
+  self._filterEnvValue = null;
+
+  self._filterType = null;
+
+  // ---------------------------------------------------            - WEIRD  STUFF -
+  // ---------------------------------------------------            ----------------
+
+  self._evals = [];
+  self._evalSequencer = new Sequencer( function(statement) {
+    eval('self.' + statement);
+  });
+  self._attachSequencers(self._evalSequencer);
+
   // ---------------------------------------------------            - SOUND CHAIN -
   // ---------------------------------------------------            ---------------
 
   self._chain = [];
+
+  // events for the event handler system!
+  self._events = {};
 
   return self;
 }
@@ -182,7 +215,8 @@ track.prototype._connectToChain = function(sound) {
 
 track.prototype._addToChain = function(input, output) {
   var self = this;
-  self._chain.push( new trackEffect(input, output) );
+  var newEffect = new trackEffect(input, output, generateId());
+  self._chain.push(newEffect);
   // connect the second-to-last effect to the new one
   if(self._chain.length > 1) {
     var penUltimate = self._chain.length - 2;
@@ -194,11 +228,24 @@ track.prototype._addToChain = function(input, output) {
     self._chain[0].output.connect( self._destination );
   }
   // return an index so we can call _removeFromChain later if we want
-  return self._chain.length - 1;
+  return newEffect.id;
 }
 
-track.prototype._removeFromChain = function(index) {
+track.prototype._removeFromChain = function(id) {
   var self = this;
+
+  var index = null;
+  for(var i = 0; i < self._chain.length; i++) {
+    if(self._chain[i].id === id) {
+      index = i;
+      break;
+    }
+  }
+
+  if(index === null) {
+    // console.log('An error occurred removing an effect from the chain with id', id, index);
+    return;
+  }
 
   // disconnect the effect at index-1 if it exists,
   // slice out the effect at index,
@@ -223,8 +270,16 @@ track.prototype._removeFromChain = function(index) {
   return null;
 }
 
-function trackEffect(input, output) {
+function trackEffect(input, output, id) {
   var self = this;
   self.input = input;
   self.output = output;
+  self.id = id;
 }
+
+var generateId = function () {
+    function S4() {
+        return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+    }
+    return (S4() + S4() + S4() + S4() + S4() + S4() + S4() + S4());
+};
