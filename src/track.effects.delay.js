@@ -2,10 +2,13 @@ track.prototype.delay = function(dtime, fb, level) {
   var self = this;
   if(arguments.length == 0) {
     if(self._delayEffectIndex !== null) {
+      // remove any events associated with this instance of the effect
+      self._off('reset', self._delayEffectIndex);
       // remove the effect from the chain
       self._delayEffectIndex = self._removeFromChain(self._delayEffectIndex);
       // detach all sequencers
       self._detachSequencers( self._delayDtimeSequencer, self._delayFbSequencer, self._delayLevelSequencer );
+
     }
   } else {
     if(self._delayEffectIndex == null) {
@@ -29,10 +32,15 @@ track.prototype.delay = function(dtime, fb, level) {
       self._attachSequencers( self._delayDtimeSequencer, self._delayFbSequencer, self._delayLevelSequencer );
 
       self._delayEffectIndex = self._addToChain(self._delay.input, self._delay.output);
+
+      // attach a `reset` handler that turns off the effect
+      self._once('reset', self._delayEffectIndex, function() {
+        self.delay();
+      });
     } else {
       self._delayDtimeSequencer.set(dtime);
-      self._delayFbSequencer.set(fb);
-      self._delayLevelSequencer.set(level);
+      self._delayFbSequencer.set(fb || 0.25);
+      self._delayLevelSequencer.set(level || 0.5);
     }
   }
   return self;
