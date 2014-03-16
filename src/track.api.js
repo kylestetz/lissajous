@@ -353,3 +353,17 @@ track.prototype.render32 = function(length) {
   self._render(length, 32);
   return self;
 }
+
+// reset event, which should be used by effects to quickly turn everything off
+track.prototype.reset = function() {
+  var self = this;
+  self._emit('reset');
+  return self;
+}
+
+track.prototype.eval = function() {
+  var self = this;
+  arguments = _parseArguments(arguments);
+  self._evalSequencer.set(arguments);
+  return self;
+}
