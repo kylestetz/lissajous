@@ -249,6 +249,18 @@ t.render(16) // render 16 beats (one measure in 4/4)
 ### `track.render32(length)`
 Same as `track.render`, but it accepts a length in 1/32nd note steps.
 
+### `track.eval(strings)` `(sequencer)`
+A sequener for evaluating functions of the track. `strings` can be any number of strings- it works by evaluating the string `eval('this.' + string)`, so any function of the track is fair game. You can also chain functions the same way you would normally.
+
+Note that this is a thin wrapper for `eval`, which means you're perfectly capable of breaking things and causing errors. But that's what makes it fun.
+
+```javascript
+var t = new track()
+t.beat(4).nl(3)
+t.eval('delay(1)', 'delay()') // toggles the delay on and off each beat
+t.eval('delay(1).chorus()', 'delay().chorus(0.5,0.9,0)')
+```
+
 ## There are some effects
 Effects are a proof of concept right now with more on the way. Call them with some parameters to turn them on, call them with no arguments to turn them off.
 
