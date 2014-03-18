@@ -6,6 +6,7 @@ track.prototype._makeOscillator = function(noteStart, noteEnd) {
 
   var envelope = new Envelope();
   var gain = context.createGain();
+  gain.gain.value = (self._attack ? 0 : self._volume);
 
   envelope.setParameter(gain.gain);
   envelope.setAdsr(self._attack, self._decay, self._sustain, self._release);
@@ -16,7 +17,17 @@ track.prototype._makeOscillator = function(noteStart, noteEnd) {
   var newNoteEnd = noteEnd + envelope.release;
 
   sound.connect(gain);
-  self._connectToChain(gain);
+
+  if(self._filterIsActive) {
+    var filter = self._createFilter();
+    self._scheduleFilterEnvelope(filter, noteStart, noteEnd);
+    gain.connect(filter);
+    self._connectToChain(filter);
+    // console.log(filter);
+  } else {
+    self._connectToChain(gain);
+  }
+
 
   sound.start(noteStart);
   sound.stop(newNoteEnd);

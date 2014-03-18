@@ -86,6 +86,17 @@ track.prototype.shift = function(amount) {
   return self;
 }
 
+// -1 is left, 1 is right, 0 is center
+track.prototype.stereo = function() {
+  var self = this;
+  arguments = _parseArguments(arguments);
+  self._pannerSequencer.set(arguments);
+  if(arguments.length == 0) {
+    self._panner.setPosition(0,0,0);
+  }
+  return self;
+}
+
 // ------------------------------------------------------------------ OSCILLATORS
 
 var SINE = "sine";

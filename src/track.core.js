@@ -6,7 +6,9 @@ function track() {
   // our destination will be the last thing the audio goes through,
   // and it will always be connected to the master node.
   self._destination = context.createGain();
-  self._destination.connect(master.destination);
+  self._panner = context.createPanner();
+  self._destination.connect(self._panner);
+  self._panner.connect(master.destination);
 
   // _schedulers is a convenience array that holds a reference to all of the
   // schedulers we feel like making. We're only going to have 1 default scheduler
@@ -112,31 +114,71 @@ function track() {
   });
   self._attachSequencers(self._currentSampleSequencer);
 
+  // ---------------------------------------------------             - STEREO MIX -
+  // ---------------------------------------------------             --------------
+
+  // self._panner.panningModel = "equalpower";
+  self._pannerSequencer = new Sequencer( function(value) {
+    // -45 to 45
+    var xDeg = value * 45;
+    var zDeg = xDeg + 90;
+    if (zDeg > 90) {
+      zDeg = 180 - zDeg;
+    }
+    var x = Math.sin(xDeg * (Math.PI / 180));
+    var z = Math.sin(zDeg * (Math.PI / 180));
+    self._panner.setPosition(x, 0, z);
+  });
+  self._attachSequencers(self._pannerSequencer);
+
   // ---------------------------------------------------             - FILTER ENV -
   // ---------------------------------------------------             --------------
 
   // we're establishing reasonable defaults for a filter
   // envelope, but the filter won't be used unless
-  // one is invoked on the track
+  // one is invoked on the track.
   self._filterEnvAttack = 0;
   self._filterEnvDecay = 0;
   self._filterEnvSustain = 1;
   self._filterEnvRelease = 0;
+  self._filterEnvAmt = 0;
 
+  self._filterType = null;
   self._filterFrequency = null;
   self._filterRes = null;
 
-  // this will hold the AudioParam that the
-  // envelope will be modulating
-  self._filterEnvParam = null;
-  self._filterEnvValue = null;
+  self._filterIsActive = false;
 
-  self._filterType = null;
+  self._filterFrequencySequencer = new Sequencer( function(value) {
+    self._filterFrequency = value;
+  });
+
+  self._filterResSequencer = new Sequencer( function(value) {
+    self._filterRes = value;
+  });
+
+  self._filterEnvAmtSequencer = new Sequencer( function(value) {
+    self._filterEnvAmt = value;
+  });
+
+  // allow the envelope to be changed each beat
+  self._filterEnvelopeSequencer = new Sequencer( function(value) {
+    self._filterEnvAttack = value[0];
+    self._filterEnvDecay = value[1];
+    self._filterEnvSustain = value[2];
+    self._filterEnvRelease = value[3];
+  });
+
+  self._attachSequencers(
+    self._filterFrequencySequencer,
+    self._filterResSequencer,
+    self._filterEnvAmtSequencer,
+    self._filterEnvelopeSequencer
+  );
 
   // ---------------------------------------------------            - WEIRD  STUFF -
   // ---------------------------------------------------            ----------------
 
-  self._evals = [];
   self._evalSequencer = new Sequencer( function(statement) {
     eval('self.' + statement);
   });

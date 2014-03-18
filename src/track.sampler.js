@@ -25,6 +25,7 @@ track.prototype._makeSampler = function(noteStart, noteEnd) {
   // make the envelope
   var envelope = new Envelope();
   var gain = context.createGain();
+  gain.gain.value = (self._attack ? 0 : self._volume);
 
   envelope.setParameter(gain.gain);
   envelope.setAdsr(self._attack, self._decay, self._sustain, self._release);
@@ -35,7 +36,21 @@ track.prototype._makeSampler = function(noteStart, noteEnd) {
   var newNoteEnd = noteEnd + envelope.release;
 
   sound.connect(gain);
-  self._connectToChain(gain);
+
+  // if we have an active filter we want to make and connect it here,
+  // since the filter and its envelope is tied to the individual note
+  // & not the track as a whole.
+  if(self._filterIsActive) {
+    // note that we're not using newNoteEnd here, since this envelope might
+    // also have a release value beyond the note end itself.
+    var filter = self._createFilter();
+    self._scheduleFilterEnvelope(filter, noteStart, noteEnd);
+    // we've got the filter back... hook it all up and we're good to go.
+    gain.connect(filter);
+    self._connectToChain(filter);
+  } else {
+    self._connectToChain(gain);
+  }
 
   if(sampleClampStart !== null || sample.looping) {
     sound.start(noteStart, sampleClampStart, sampleClampEnd);

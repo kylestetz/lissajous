@@ -33,9 +33,10 @@ Envelope.prototype.setParameter = function(param) {
 
 Envelope.prototype.schedule = function(noteStart, noteEnd) {
   var self = this;
-  self.parameter.value = self.value;
+  // self.parameter.value = self.value;
   // start at 0 if there is attack
-  self.parameter.linearRampToValueAtTime(0, noteStart);
+  // self.parameter.value = (self.attack ? 0 : self.value);
+  self.parameter.linearRampToValueAtTime(self.parameter.value, noteStart);
   // attack ramp
   self.parameter.linearRampToValueAtTime(self.value, noteStart + self.attack);
   // decay ramp, ends at sustain value
