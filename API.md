@@ -79,6 +79,9 @@ t.beat(8).notes(64) // play note#64 every half measure
 t.shift(4) // pause for an additional quarter note before the next note is triggered
 ```
 
+###  `track.pan(amounts)` `(sequencer)`
+Stereo pan. Amounts are specified from -1 to 1, where -1 is left, 0 is center, and 1 is right.
+
 ### `track.sine()`
 Set the oscillator type to a sine wave. Will not work if there are active samples (remove them first by calling `track.sample()`).
 

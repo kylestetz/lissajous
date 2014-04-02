@@ -87,12 +87,12 @@ track.prototype.shift = function(amount) {
 }
 
 // -1 is left, 1 is right, 0 is center
-track.prototype.stereo = function() {
+track.prototype.pan = function() {
   var self = this;
   arguments = _parseArguments(arguments);
-  self._pannerSequencer.set(arguments);
+  self._panSequencer.set(arguments);
   if(arguments.length == 0) {
-    self._panner.setPosition(0,0,0);
+    self._panSequencer.set([0]);
   }
   return self;
 }

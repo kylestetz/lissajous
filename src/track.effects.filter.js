@@ -4,7 +4,7 @@ track.prototype._applyFilter = function(freq, res, amt, type) {
   if(!freq && !res && !amt) {
     // if the filter is on but another kind was called,
     // switch it. Is this the right behavior? dunno.
-    if(self._filterIsActive) {
+    if(self._filterIsActive && self._filterType !== type) {
       self._filterType = type;
       return;
     } else {

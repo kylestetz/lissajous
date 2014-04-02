@@ -3,12 +3,22 @@ function track() {
   var self = this;
   clock.addTrack(self);
 
-  // our destination will be the last thing the audio goes through,
-  // and it will always be connected to the master node.
-  self._destination = context.createGain();
-  self._panner = context.createPanner();
-  self._destination.connect(self._panner);
-  self._panner.connect(master.destination);
+  // our destination will be the last thing the audio goes through
+  // before it is split.
+  // self._destination = context.createGain();
+
+  // stereo split at the end of the signal
+  self._destination = context.createChannelSplitter(2);
+  self._leftChannel = context.createGain();
+  self._rightChannel = context.createGain();
+  self._destination.connect(self._leftChannel, 1);
+  self._destination.connect(self._rightChannel, 0);
+  self._final = context.createChannelMerger(2);
+  self._leftChannel.connect(self._final, 0, 1);
+  self._rightChannel.connect(self._final, 0, 0);
+
+  // self._destination.connect(self._split);
+  self._final.connect(master.destination);
 
   // _schedulers is a convenience array that holds a reference to all of the
   // schedulers we feel like making. We're only going to have 1 default scheduler
@@ -117,19 +127,20 @@ function track() {
   // ---------------------------------------------------             - STEREO MIX -
   // ---------------------------------------------------             --------------
 
-  // self._panner.panningModel = "equalpower";
-  self._pannerSequencer = new Sequencer( function(value) {
-    // -45 to 45
-    var xDeg = value * 45;
-    var zDeg = xDeg + 90;
-    if (zDeg > 90) {
-      zDeg = 180 - zDeg;
+  self._panSequencer = new Sequencer( function(value) {
+    // -1 to 1 where (-1 to 0) is left mod and (0 to 1) is right mod
+    if(value === 0) {
+      self._leftChannel.gain.value = 1;
+      self._rightChannel.gain.value = 1;
+    } else if(value < 0) {
+      self._leftChannel.gain.value = 1 + value;
+      self._rightChannel.gain.value = 1;
+    } else {
+      self._leftChannel.gain.value = 1;
+      self._rightChannel.gain.value = 1 - value;
     }
-    var x = Math.sin(xDeg * (Math.PI / 180));
-    var z = Math.sin(zDeg * (Math.PI / 180));
-    self._panner.setPosition(x, 0, z);
   });
-  self._attachSequencers(self._pannerSequencer);
+  self._attachSequencers(self._panSequencer);
 
   // ---------------------------------------------------             - FILTER ENV -
   // ---------------------------------------------------             --------------
@@ -249,6 +260,26 @@ track.prototype._connectToChain = function(sound) {
   if(self._chain.length) {
     sound.connect(self._chain[0].input);
   } else {
+    // check channels,
+    // sound.connect(self._destination);
+    self._connectToDestination(sound);
+  }
+}
+
+track.prototype._connectToDestination = function(sound) {
+  var self = this;
+  // check channels and connect accordingly.
+  if(sound.numberOfOutputs == 1 && sound.numberOfChannels < 2) {
+    // disconnect the destination and connect directly to _leftChannel and _rightChannel.
+    self._destination.disconnect();
+    sound.connect(self._leftChannel);
+    sound.connect(self._rightChannel);
+  } else {
+    // reconnect destination in case it's unplugged
+    // (this is ignore in the case that it's already connected)
+    // and carry on.
+    self._destination.connect(self._leftChannel, 0);
+    self._destination.connect(self._rightChannel, 1);
     sound.connect(self._destination);
   }
 }
@@ -265,9 +296,11 @@ track.prototype._addToChain = function(input, output) {
     var ultimate = self._chain.length - 1;
     self._chain[ penUltimate ].output.disconnect();
     self._chain[ penUltimate ].output.connect( self._chain[ ultimate ].input );
-    self._chain[ ultimate ].output.connect( self._destination );
+    // self._chain[ ultimate ].output.connect( self._destination );
+    self._connectToDestination( self._chain[ ultimate ].output );
   } else {
-    self._chain[0].output.connect( self._destination );
+    // self._chain[0].output.connect( self._destination );
+    self._connectToDestination( self._chain[0].output );
   }
   // return an index so we can call _removeFromChain later if we want
   return newEffect.id;
@@ -304,7 +337,8 @@ track.prototype._removeFromChain = function(id) {
   }
   // or, if the thing we removed was the last in line, connect the left sibling to self.destination
   else if(index > 0 && index == self._chain.length) {
-    self._chain[index - 1].output.connect( self._destination );
+    // self._chain[index - 1].output.connect( self._destination );
+    self._connectToDestination( self._chain[index - 1].output );
   }
 
   // otherwise, the chain is empty and no action is necessary.
