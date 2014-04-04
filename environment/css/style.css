@@ -32,6 +32,18 @@ body
   padding: 0;
 }
 
+a
+{
+  color: #4e8996;
+  transition: opacity 0.15s;
+  text-decoration: none;
+}
+
+a:hover
+{
+  opacity: 0.6;
+}
+
 p
 {
   text-align: center;
