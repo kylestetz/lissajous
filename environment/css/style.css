@@ -57,3 +57,41 @@ p
 {
   margin-top: 150px;
 }
+
+/**/
+
+.drag-and-drop
+{
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+
+  opacity: 0;
+  transform: translateY(-100%);
+  -webkit-transform: translateY(-100%);
+
+  transition: transform 0s 0.2s, opacity 0.2s;
+  -webkit-transition: -webkit-transform 0s 0.2s, opacity 0.2s;
+
+  background-color: #D9D8D4;
+  text-align: center;
+}
+
+.drag-and-drop .drag-and-drop-inner
+{
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+
+  display: inline-block;
+  margin: auto;
+  height: 40px;
+}
+
+.drag-and-drop.show
+{
+  opacity: 1;
+  transform: translateY(0);
+  -webkit-transform: translateY(0);
+
+  transition: transform 0s, opacity 0.2s;
+  -webkit-transition: -webkit-transform 0s, opacity 0.2s;
+}

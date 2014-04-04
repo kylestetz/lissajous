@@ -37,25 +37,27 @@ function _m(value, iterations) {
   return values;
 }
 
-var pno = [];
-loadSounds([
-    './samples/pianosong/piano1.wav',
-    './samples/pianosong/pianobass.wav',
-    './samples/pianosong/pianodoodle.wav',
-    './samples/pianosong/bass.wav',
-    './samples/pianosong/synth.wav',
-    './samples/pianosong/perc.wav'
-  ],
-  function(list) {
-    pno = list;
-});
+// Here's an example of how to load samples into an array.
 
-var drums = [];
-loadSounds([
-    './samples/drums/kick.wav',
-    './samples/drums/snare.wav',
-    './samples/drums/hat.wav'
-  ],
-  function(list) {
-    drums = list;
-});
+// var pno = [];
+// loadSounds([
+//     './samples/pianosong/piano1.wav',
+//     './samples/pianosong/pianobass.wav',
+//     './samples/pianosong/pianodoodle.wav',
+//     './samples/pianosong/bass.wav',
+//     './samples/pianosong/synth.wav',
+//     './samples/pianosong/perc.wav'
+//   ],
+//   function(list) {
+//     pno = list;
+// });
+
+// var drums = [];
+// loadSounds([
+//     './samples/drums/kick.wav',
+//     './samples/drums/snare.wav',
+//     './samples/drums/hat.wav'
+//   ],
+//   function(list) {
+//     drums = list;
+// });
