@@ -11,11 +11,10 @@ track.prototype._render = function(renderLength, resolution) {
     lengthOfBeat = self._beatPattern.getLength32() * clock.noteLength();
   }
 
-  console.log('length of beat is: ' + lengthOfBeat);
-
   // store a record instance
+  var filePath = (window._demoSite) ? '/lissajous-repo/src/vendor/recorderWorker.js' : '/src/vendor/recorderWorker.js';
   self._recordInstance = new Recorder(self._destination, {
-    workerPath: '/src/vendor/recorderWorker.js',
+    workerPath: filePath,
   });
 
   // attach a new event to the _beatPattern's onFirstNote callback,
