@@ -111,8 +111,6 @@ t.clshift(-1/16)
 ```
 
 #### Todos
-- Add a filter effect with its own envelope
-- Allow for stereo mixing
 - Develop a technique that would make smooth LFOs possible
 - MIDI in/out
 - Audio In
