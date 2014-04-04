@@ -4,12 +4,14 @@
 
 Lissajous is a tool for real time audio performance using Javascript. It wraps succinct tools for creating oscillators and samplers into a chainable API, allowing performers to build and improvise songs with a minimum of code.
 
+Lissajous exists entirely within the Javascript console & was designed for use with Google Chrome.
+
 #### [Play with Lissajous](http://lissajousjs.com)
-Requires the latest stable Chrome build & a relatively recent OS.
+Requires the latest stable Chrome build & a relatively recent OS. If you have your own .wav files you can drop them in the window to load them into the environment!
 
 #### [Watch a demo video](http://www.youtube.com/watch?v=jBRqOp5ws58)
 
-In order to run Lissajous locally you have to have a copy of the lissajous environment on your machine. Do this by pulling down this repo: `git clone git@github.com:kylestetz/lissajous.git` and opening the file `/environment/index.html`. The `/samples/` directory is ignored in this repo, so the samples will fail to load. Replace them with your own and update `/environment/extras.js`!
+In order to run Lissajous locally you have to have a copy of the lissajous environment on your machine. Do this by pulling down this repo: `git clone git@github.com:kylestetz/lissajous.git` and opening the file `/environment/index.html`. The environment doesn't contain any samples- add an `/environment/samples/` folder (ignored by git) and add samples via `/environment/extras.js`!
 
 #### [View the Performance API Documentation](https://github.com/kylestetz/lissajous/blob/master/API.md)
 
