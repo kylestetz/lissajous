@@ -103,8 +103,10 @@ t.beat(4)
 t.type(0,1,2,3) // plays a sine, square, saw, and tri note in sequence
 ```
 
-### `track.adsr(attack, decay, sustain, release)`
+### `track.adsr(attack, decay, sustain, release)` `(sequencer)`
 ADSR envelope for each note. Attack, decay, and release are specified in 16th note steps. Sustain is a value from 0 - 1. Unlike with `track.beat`, `track.adsr` can accept fractions of a step- for example `0.1` will represent a tenth of a  1/16th note.
+
+This function also accepts multiple envelopes as arrays, as in the example below.
 
 ```javascript
 var t = new track()
@@ -112,9 +114,11 @@ t.beat(4).nl(4)
 t.adsr(1, 1, 0.5, 1) // 16th note of attack,
                      // then 16th note of decay down to 0.5 volume,
                      // then 16th note of release after note off
+
+t.adsr([0,0,1,0], [1,1,0.5,0.1]) // alternate between two envelopes
 ```
 
-### `track.adsr32(attack, decay, sustain, release)`
+### `track.adsr32(attack, decay, sustain, release)` `(sequencer)`
 Same as `track.adsr`, but `attack`, `decay`, and `sustain` are specified in 1/32nd notes.
 
 ## Working with Samples
@@ -262,6 +266,44 @@ var t = new track()
 t.beat(4).nl(3)
 t.eval('delay(1)', 'delay()') // toggles the delay on and off each beat
 t.eval('delay(1).chorus()', 'delay().chorus(0.5,0.9,0)')
+```
+
+## Polyphonic Filter Envelope
+Each track comes with a note-triggered filter envelope. While the track is technically monophonic (in that only one note can be played at a given moment using `track.beat`), the notes can overlap and each note gets its own instance of the filter envelope.
+
+Filters accept frequency from `0 - 127`, res from `0.1 - 1000` (take it easy with numbers over 100!), and an optional amount from `0 - 127` to shift the frequency as the envelope opens.
+
+To turn off a filter, call it with no arguments. To switch filter types without changing the parameters, call a *different* filter with no arguments.
+
+### `track.lp(freq, res, amt)`
+
+### `track.hp(freq, res, amt)`
+
+### `track.bp(freq, res, amt)`
+
+### `track.notch(freq, res, amt)`
+
+### `track.ffreq(frequencies)` `(sequencer)`
+A sequencer for filter frequencies.
+
+### `track.fres(resonances)` `(sequencer)`
+A sequencer for filter resonance.
+
+### `track.famt(amounts)` `(sequencer)`
+A sequencer for filter amounts.
+
+### `track.fenv(attack, decay, sustain, release)` `(sequencer)`
+The filter envelope. Works the same way `track.adsr()` does, where `attack`, `decay`, and `release` are specified in 1/16th notes and `sustain` is a value from `0 - 1`.
+
+This function also accepts a sequence of envelopes as arrays.
+
+```javascript
+t = new track()
+t.beat(4).nl(4).notes(64, 60, 72)
+t.lp(64,10,30)
+t.fenv(1,1,0.5,0)
+
+t.fenv([0,1,0,0], [1,0,1,0]) // multiple alternating envelopes
 ```
 
 ## There are some effects
