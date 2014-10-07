@@ -191,9 +191,91 @@ function track() {
   // ---------------------------------------------------            ----------------
 
   self._evalSequencer = new Sequencer( function(statement) {
+    // accept empty strings as `skips`
+    if(!statement){
+      return;
+    }
     eval('self.' + statement);
   });
   self._attachSequencers(self._evalSequencer);
+
+
+  // `track.in` setup
+
+  // make a scheduler that listens to 16th ticks
+  self._inQueue = [];
+  self._inScheduler = new Scheduler( function(nextTick) {
+    for(var i = self._inQueue.length - 1; i >= 0; i--) {
+      self._inQueue[i]._next();
+    }
+  });
+  self._addScheduler(self._inScheduler);
+  self._inScheduler.set([1], 16);
+
+  // the public `in` function returns a new instance of self._in
+  self._in = function(count) {
+    var inSelf = this;
+    // attach this new instance to the track's queue of active `in` requests
+    self._inQueue.push(inSelf);
+
+    // each `in` requests gets its own queue of functions
+    // (in order to support the chainable API)
+    inSelf.queue = [];
+    inSelf.count = count;
+    // `_` is a reference to the track, which allows us to
+    // pop back out of the in queue via the API,
+    // e.g. `t.in(32).notes(64,63,62)._.beat(2)`, which sets
+    // the beat to `2` now and changes the notes in 32 steps
+    inSelf._ = self;
+
+    // `_run` calls the internal queue of functions with their arguments
+    inSelf._run = function() {
+      for(var i = 0; i < inSelf.queue.length; i++) {
+        // call the function with its arguments
+        self[inSelf.queue[i].action].apply(self, inSelf.queue[i].args);
+      }
+      self._inQueue.splice(self._inQueue.indexOf(inSelf), 1);
+    };
+
+    // `_next` counts the steps passed until it's time to run
+    inSelf._next = function() {
+      inSelf.count -= 1;
+      if(inSelf.count === 0) {
+        inSelf._run();
+      }
+    };
+    return inSelf;
+  };
+
+  // grab the fields of the public API we want to mirror,
+  // except `in` which we have to override
+  var _publicApiFields = [];
+  for(var field in track.prototype) {
+    if(field.substr(0,1) !== '_' && field !== 'in') {
+      _publicApiFields.push(field);
+    }
+  }
+
+  // add each function to the `_in` prototype,
+  // which stores the function that was called and its arguments.
+  _publicApiFields.forEach( function(field) {
+    self._in.prototype[field] = function() {
+      var inSelf = this;
+      inSelf.queue.push({
+        action: field,
+        args: arguments
+      });
+      return inSelf;
+    };
+
+    // when `in` is called, break out of the `_in` queue
+    // and create a new instance of `_in` on the track
+    // with the combined time.
+    self._in.prototype['in'] = function(count) {
+      var inSelf = this;
+      return self.in(count + inSelf.count);
+    };
+  });
 
   // ---------------------------------------------------            - SOUND CHAIN -
   // ---------------------------------------------------            ---------------
@@ -202,6 +284,15 @@ function track() {
 
   // events for the event handler system!
   self._events = {};
+
+
+  // ---------------------------------------------------            -   SAMPLE?   -
+  // ---------------------------------------------------            ---------------
+
+  // if there are arguments they are samples!
+  if(arguments.length) {
+    self.sample.apply(self, arguments);
+  }
 
   return self;
 }

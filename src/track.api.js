@@ -378,3 +378,18 @@ track.prototype.eval = function() {
   self._evalSequencer.set(arguments);
   return self;
 }
+
+// ------------------------------------------------------------------ WEIRD
+
+track.prototype.in = function(count) {
+  var self = this;
+  // return an instance of the _in queue,
+  // which allows us to stage changes
+  // for later.
+  return new self._in(count);
+}
+
+track.prototype.log = function() {
+  console.log(arguments);
+  return this;
+}
