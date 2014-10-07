@@ -19,32 +19,32 @@ function _parseArguments(args) {
 
 track.prototype.beat = function() {
   var self = this;
-  arguments = _parseArguments(arguments);
+  var arguments = _parseArguments(arguments);
   self._beatPattern.set(arguments, 16);
   return self;
 };
 
 track.prototype.beat32 = function() {
   var self = this;
-  arguments = _parseArguments(arguments);
+  var arguments = _parseArguments(arguments);
   self._beatPattern.set(arguments, 32);
   return self;
-}
+};
 
 track.prototype.notes = function() {
   var self = this;
   // let's allow an array of notes as well
-  arguments = _parseArguments(arguments);
+  var arguments = _parseArguments(arguments);
   self._notesSequencer.set(arguments);
   if(arguments.length == 0) {
     self._currentNote = 64;
   }
   return self;
-}
+};
 
 track.prototype.nl = function() {
   var self = this;
-  arguments = _parseArguments(arguments);
+  var arguments = _parseArguments(arguments);
   self._noteLengthSequencer.set(arguments);
   if(arguments.length) {
     // nl will be 16th notes, so we need to multiply everything by 2
@@ -56,18 +56,18 @@ track.prototype.nl = function() {
     self._currentNoteLength = 2;
   }
   return self;
-}
+};
 
 track.prototype.nl32 = function() {
   var self = this;
-  arguments = _parseArguments(arguments);
+  var arguments = _parseArguments(arguments);
   self._noteLengthSequencer.set(arguments);
   if(arguments.length == 0) {
     // reasonable default -> nl = 16th note
     self._currentNoteLength = 2;
   }
   return self;
-}
+};
 
 track.prototype.trans = function(semitones) {
   var self = this;
@@ -75,7 +75,7 @@ track.prototype.trans = function(semitones) {
     self._notesSequencer.pattern[i] = self._notesSequencer.pattern[i] + semitones;
   }
   return self;
-}
+};
 
 track.prototype.shift = function(amount) {
   var self = this;
@@ -84,18 +84,18 @@ track.prototype.shift = function(amount) {
     self._schedulers[0].untilNextBeat = 0;
   }
   return self;
-}
+};
 
 // -1 is left, 1 is right, 0 is center
 track.prototype.pan = function() {
   var self = this;
-  arguments = _parseArguments(arguments);
+  var arguments = _parseArguments(arguments);
   self._panSequencer.set(arguments);
   if(arguments.length == 0) {
     self._panSequencer.set([0]);
   }
   return self;
-}
+};
 
 // ------------------------------------------------------------------ OSCILLATORS
 
@@ -112,7 +112,7 @@ track.prototype.sine = function() {
   }
   self._oscType = SINE;
   return self;
-}
+};
 
 track.prototype.square = function() {
   var self = this;
@@ -122,7 +122,7 @@ track.prototype.square = function() {
   }
   self._oscType = SQUARE;
   return self;
-}
+};
 
 track.prototype.saw = function() {
   var self = this;
@@ -132,7 +132,7 @@ track.prototype.saw = function() {
   }
   self._oscType = SAWTOOTH;
   return self;
-}
+};
 
 track.prototype.tri = function() {
   var self = this;
@@ -142,48 +142,48 @@ track.prototype.tri = function() {
   }
   self._oscType = TRIANGLE;
   return self;
-}
+};
 
 // oscillator type sequencer! 0 to 3 or SINE, SQUARE, TRIANGLE, SAWTOOTH
 track.prototype.type = function() {
   var self = this;
-  arguments = _parseArguments(arguments);
+  var arguments = _parseArguments(arguments);
   self._oscTypeSequencer.set(arguments);
   if(arguments.length == 0) {
     self._oscType = SINE;
   }
   return self;
-}
+};
 
 // ------------------------------------------------------------------ ENVELOPE
 
 track.prototype.vol = function() {
   var self = this;
-  arguments = _parseArguments(arguments);
+  var arguments = _parseArguments(arguments);
   self._volumeSequencer.set(arguments);
   if(arguments.length == 0) {
     self._volume = 0;
   }
   return self;
-}
+};
 
 track.prototype.adsr = function() {
   var self = this;
   var resolutionModifier = clock.bpmResolution / 16;
   // arguments isn't really an array so we have to turn it into one
-  arguments = Array.prototype.slice.call(arguments);
+  var arguments = Array.prototype.slice.call(arguments);
   self._applyAdsrArguments(arguments, resolutionModifier);
   return self;
-}
+};
 
 track.prototype.adsr32 = function() {
   var self = this;
   var resolutionModifier = clock.bpmResolution / 32;
   // arguments isn't really an array so we have to turn it into one
-  arguments = Array.prototype.slice.call(arguments);
+  var arguments = Array.prototype.slice.call(arguments);
   self._applyAdsrArguments(arguments, resolutionModifier);
   return self;
-}
+};
 
 track.prototype._applyAdsrArguments = function(args, resolutionModifier) {
   var self = this;
@@ -211,7 +211,7 @@ track.prototype._applyAdsrArguments = function(args, resolutionModifier) {
     self._sustain = 1;
     self._adsrSequencer.set([]);
   }
-}
+};
 
 // ------------------------------------------------------------------ SAMPLER
 
@@ -219,7 +219,7 @@ track.prototype._applyAdsrArguments = function(args, resolutionModifier) {
 track.prototype.sample = function() {
   var self = this;
   self._samples = [];
-  arguments = Array.prototype.slice.call(arguments);
+  var arguments = Array.prototype.slice.call(arguments);
   arguments = _parseArguments(arguments);
   arguments.forEach( function(buffer) {
     self._samples.push( new Sample(buffer) );
@@ -229,16 +229,16 @@ track.prototype.sample = function() {
     self._editingSample = self._samples[0];
   }
   return self;
-}
+};
 
 track.prototype.addsamples = function() {
   var self = this;
-  arguments = Array.prototype.slice.call(arguments);
+  var arguments = Array.prototype.slice.call(arguments);
   arguments.forEach( function(buffer) {
     self._samples.push( new Sample(buffer) );
   });
   return self;
-}
+};
 
 track.prototype.select = function(index) {
   var self = this;
@@ -246,12 +246,12 @@ track.prototype.select = function(index) {
     self._editingSample = self._samples[index];
   }
   return self;
-}
+};
 
 // sample sequence
 track.prototype.sseq = function() {
   var self = this;
-  arguments = _parseArguments(arguments);
+  var arguments = _parseArguments(arguments);
   // safeguard against errors for indices past the available length
   for(var i = 0; i < arguments.length; i++) {
     if(arguments[i] > self._samples.length) {
@@ -260,7 +260,7 @@ track.prototype.sseq = function() {
   }
   self._currentSampleSequencer.set(arguments);
   return self;
-}
+};
 
 track.prototype.clamp = function(start, end) {
   var self = this;
@@ -274,16 +274,16 @@ track.prototype.clamp = function(start, end) {
     }
   }
   return self;
-}
+};
 
 track.prototype.clshift = function() {
   var self = this;
   if(self._editingSample) {
-    arguments = _parseArguments(arguments);
+    var arguments = _parseArguments(arguments);
     self._editingSample.clampShiftSequencer.set(arguments);
   }
   return self;
-}
+};
 
 track.prototype.loop = function() {
   var self = this;
@@ -295,14 +295,14 @@ track.prototype.loop = function() {
     }
   }
   return self;
-}
+};
 
 track.prototype.stretch = function() {
   var self = this;
   if(self._editingSample) {
     if(arguments.length) {
       // self._editingSample.stretchToFit = arguments[0] * (clock.bpmResolution / 16);
-      arguments = _parseArguments(arguments);
+      var arguments = _parseArguments(arguments);
       for(var i = 0; i < arguments.length; i++) {
         arguments[i] = arguments[i] * (clock.bpmResolution / 16);
       }
@@ -314,7 +314,7 @@ track.prototype.stretch = function() {
     }
   }
   return self;
-}
+};
 
 track.prototype.speed = function() {
   var self = this;
@@ -328,7 +328,7 @@ track.prototype.speed = function() {
     }
   }
   return self;
-}
+};
 
 track.prototype.reverse = function() {
   var self = this;
@@ -342,7 +342,7 @@ track.prototype.reverse = function() {
     self._editingSample.buffer = newBuffer;
   }
   return self;
-}
+};
 
 track.prototype.root = function(note) {
   var self = this;
@@ -350,34 +350,34 @@ track.prototype.root = function(note) {
     self._editingSample.rootNote = note;
   }
   return self;
-}
+};
 
 
 track.prototype.render = function(length) {
   var self = this;
   self._render(length, 16);
   return self;
-}
+};
 
 track.prototype.render32 = function(length) {
   var self = this;
   self._render(length, 32);
   return self;
-}
+};
 
 // reset event, which should be used by effects to quickly turn everything off
 track.prototype.reset = function() {
   var self = this;
   self._emit('reset');
   return self;
-}
+};
 
 track.prototype.eval = function() {
   var self = this;
   arguments = _parseArguments(arguments);
   self._evalSequencer.set(arguments);
   return self;
-}
+};
 
 // ------------------------------------------------------------------ WEIRD
 
@@ -387,9 +387,9 @@ track.prototype.in = function(count) {
   // which allows us to stage changes
   // for later.
   return new self._in(count);
-}
+};
 
 track.prototype.log = function() {
   console.log(arguments);
   return this;
-}
+};
