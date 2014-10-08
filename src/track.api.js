@@ -72,7 +72,9 @@ track.prototype.nl32 = function() {
 track.prototype.trans = function(semitones) {
   var self = this;
   for(var i = 0; i < self._notesSequencer.pattern.length; i++) {
-    self._notesSequencer.pattern[i] = self._notesSequencer.pattern[i] + semitones;
+    if(typeof self._notesSequencer.pattern[i] !== 'function') {
+      self._notesSequencer.pattern[i] = self._notesSequencer.pattern[i] + semitones;
+    }
   }
   return self;
 };
@@ -276,7 +278,7 @@ track.prototype.clamp = function(start, end) {
   return self;
 };
 
-track.prototype.clshift = function() {
+track.prototype.cs = track.prototype.clshift = function() {
   var self = this;
   if(self._editingSample) {
     var arguments = _parseArguments(arguments);
