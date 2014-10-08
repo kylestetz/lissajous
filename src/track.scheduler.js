@@ -31,10 +31,14 @@ Scheduler.prototype.set = function(arguments, resolution) {
   // if(args.length == 1 && Array.isArray(args[0])) {
     // this is one of those step sequencer jams
     args.forEach( function(step) {
-      if(step > 0) {
-        self.pattern.push( new Note(step * resolutionModifier) );
+      if(typeof step === 'function') {
+        self.pattern.push(step);
       } else {
-        self.pattern.push( new Rest(1 * resolutionModifier) );
+        if(step > 0) {
+          self.pattern.push( new Note(step * resolutionModifier) );
+        } else {
+          self.pattern.push( new Rest(1 * resolutionModifier) );
+        }
       }
     });
   // }
@@ -59,15 +63,20 @@ Scheduler.prototype.tick = function(nextTick) {
   // the clock is telling us when the next note is. check if we have something to play:
   if(self.pattern.length) {
     if(self.untilNextBeat == 0) {
-      // do the work, but only if it's a note (and not a rest)
-      if(self.pattern[self.currentStep] instanceof Note) {
+      // do the work, but only if it's a note or a callback (not a rest)
+      if( !(self.pattern[self.currentStep] instanceof Rest) ) {
         self.callback(nextTick);
         if(self.currentStep === 0) {
           self.doFirstNoteCallbacks(nextTick);
         }
       }
       // set untilNextBeat based on the next value in the sequencer array.
-      self.untilNextBeat = self.pattern[self.currentStep].length - 1;
+      if(typeof self.pattern[self.currentStep] === 'function') {
+        self.untilNextBeat = self.pattern[self.currentStep]();
+      } else {
+        self.untilNextBeat = self.pattern[self.currentStep].length - 1;
+      }
+
       self.currentStep = ++self.currentStep % self.pattern.length;
     } else {
       self.untilNextBeat--;
@@ -92,7 +101,13 @@ Scheduler.prototype.getLength32 = function() {
 
   var sum = 0;
   for(var i = 0; i < self.pattern.length; i++) {
-    sum += self.pattern[i].length / (clock.bpmResolution / 32);
+    var l;
+    if(typeof self.pattern[i] === 'function') {
+      l = self.pattern[i]();
+    } else {
+      l = self.pattern[i];
+    }
+    sum += l / (clock.bpmResolution / 32);
   }
 
   return sum;
