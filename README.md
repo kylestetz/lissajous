@@ -10,10 +10,10 @@ Lissajous exists entirely within the Javascript console & was designed for use w
 Requires the latest stable Chrome build & a relatively recent OS. If you have your own .wav files you can drop them in the window to load them into the environment!
 
 #### Watch a few demo videos
-- [01](https://www.youtube.com/watch?v=jBRqOp5ws58)
-- [02](https://www.youtube.com/watch?v=zLzRrKJLYjI)
-- [03](https://www.youtube.com/watch?v=degtBGL2TDY)
-- [04](https://www.youtube.com/watch?v=4Krk9ujQwQk)
+- [01 - "performance"](https://www.youtube.com/watch?v=jBRqOp5ws58)
+- [02 - "slow guitar thing"](https://www.youtube.com/watch?v=zLzRrKJLYjI)
+- [03 - "synths"](https://www.youtube.com/watch?v=degtBGL2TDY)
+- [04 - "random walk"](https://www.youtube.com/watch?v=4Krk9ujQwQk)
 
 In order to run Lissajous locally you have to have a copy of the lissajous environment on your machine. Do this by pulling down this repo: `git clone git@github.com:kylestetz/lissajous.git` and opening the file `/environment/index.html`. The environment doesn't contain any samples- add an `/environment/samples/` folder (ignored by git) and add samples via `/environment/extras.js`!
 
