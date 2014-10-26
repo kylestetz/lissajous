@@ -17,7 +17,23 @@ function ri(min, max) {
     min = 0;
   }
   return function() {
-    return Math.floor( Math.random() * (max - min) + min );
+    return Math.floor( Math.random() * ((max+1) - min) + min );
+  };
+}
+
+function step(start, end, iterations) {
+  var current = start;
+  var _step = (end - start) / iterations;
+  var begin = true;
+  return function() {
+    if(current === end) {
+      return end;
+    }
+    if(begin) {
+      begin = false;
+      return start;
+    }
+    return current += _step;
   };
 }
 

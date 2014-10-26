@@ -17,6 +17,15 @@ function _parseArguments(args) {
   return args;
 }
 
+function flattenArguments(args) {
+  args = Array.prototype.slice.call(args);
+  var flattened = [];
+  args.forEach( function(item) {
+    flattened = flattened.concat(item);
+  });
+  return flattened;
+}
+
 track.prototype.beat = function() {
   var self = this;
   var arguments = _parseArguments(arguments);

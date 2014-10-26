@@ -32,7 +32,7 @@ Scheduler.prototype.set = function(arguments, resolution) {
     // this is one of those step sequencer jams
     args.forEach( function(step) {
       if(typeof step === 'function') {
-        self.pattern.push(step);
+        self.pattern.push({ fn: step, resolutionModifier: resolutionModifier });
       } else {
         if(step > 0) {
           self.pattern.push( new Note(step * resolutionModifier) );
@@ -71,8 +71,8 @@ Scheduler.prototype.tick = function(nextTick) {
         }
       }
       // set untilNextBeat based on the next value in the sequencer array.
-      if(typeof self.pattern[self.currentStep] === 'function') {
-        self.untilNextBeat = self.pattern[self.currentStep]();
+      if(self.pattern[self.currentStep].fn) {
+        self.untilNextBeat = self.pattern[self.currentStep].fn() * self.pattern[self.currentStep].resolutionModifier - 1;
       } else {
         self.untilNextBeat = self.pattern[self.currentStep].length - 1;
       }
