@@ -1,6 +1,7 @@
-## A sequence-based performance API
+## Lissajous: a sequence-based performance API
 
 [**Clock**](https://github.com/kylestetz/lissajous/blob/master/API.md#clocktempo)
+
 [**Track API**](https://github.com/kylestetz/lissajous/blob/master/API.md#track-api)
 - [`track.beat(steps)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackbeatsteps-sequencer)
 - [`track.beat32(steps)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackbeat32steps-sequencer)
@@ -58,6 +59,8 @@ Effects
 [**Groups API**](https://github.com/kylestetz/lissajous/blob/master/API.md#groups-api)
 - [`group.add`](https://github.com/kylestetz/lissajous/blob/master/API.md#groupaddtracks)
 - [`group.remove`](https://github.com/kylestetz/lissajous/blob/master/API.md#groupremovetracks)
+
+### What is a sequence?
 
 Many of the parameters of a track can be sequenced. A sequence is just a list of values- for example, if we wanted to make a sequence of notes, we would say `track.notes(64, 60, 62, 72)`... At every beat of the track the parameter would adopt the next value in the array, looping back around to 0 when it reaches the end.
 
@@ -233,7 +236,10 @@ t.clamp(1/4) // clamp to the first quarter of the sample
 ```
 
 ### `track.clshift(amounts)` `(sequencer)`
+### `track.cs(amounts)` `(sequencer)`
 Stands for Clamp Shift. Shifts the clamp points by a given amount every beat. Accepts any number of arguments, allowing you to shift by a different amount each beat.
+
+`track.clshift` and `track.cs` refer to the same function.
 
 ### `track.loop(boolean)`
 Determines whether a sample loops if the note is longer than the sample length. Loop also works with clamp points, allowing you to loop only a portion of the sample.
