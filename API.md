@@ -31,7 +31,7 @@ Samples
 - [`track.speed(amount)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackspeedamount)
 - [`track.reverse()`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackreverse)
 - [`track.root(note)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackrootnote)
-- [`track.render(length)` `experimental`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackrenderlength-experimental)
+- [`track.render(length)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackrenderlength-experimental)
 - [`track.render32(length)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackrender32length)
 - [`track.eval(strings)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackevalstrings-sequencer)
 
@@ -56,8 +56,8 @@ Effects
 - [`track.tremolo(rate [, intensity, stereoPhase])`](https://github.com/kylestetz/lissajous/blob/master/API.md#tracktremolorate--intensity-stereophase)
 
 [**Groups API**](https://github.com/kylestetz/lissajous/blob/master/API.md#groups-api)
-- [`group.add`]()
-- [`group.remove`]()
+- [`group.add`](https://github.com/kylestetz/lissajous/blob/master/API.md#groupaddtracks)
+- [`group.remove`](https://github.com/kylestetz/lissajous/blob/master/API.md#groupremovetracks)
 
 Many of the parameters of a track can be sequenced. A sequence is just a list of values- for example, if we wanted to make a sequence of notes, we would say `track.notes(64, 60, 62, 72)`... At every beat of the track the parameter would adopt the next value in the array, looping back around to 0 when it reaches the end.
 
@@ -355,6 +355,11 @@ A special `_` property is available after a call to `in` which allows you to bre
 ```javascript
 var t = new track()
 t.log('called now').in(16).log('16 beats later')._.log('also called now')
+// logs:
+// "called now"
+// "also called now"
+// ...
+// "16 beats later"
 ```
 
 ## Polyphonic Filter Envelope
@@ -459,7 +464,7 @@ The tremolo effect from [Tuna.js](https://github.com/Dinahmoe/tuna).
 
 Tracks can be grouped together. Groups have an API identical to tracks, but the function will be called once for each track in the group.
 
-`group`
+### `group(tracks)`
 
 ```javascript
 var t1 = new track()
@@ -469,10 +474,10 @@ var g = new group(t1, t2)
 g.beat(2) // calls beat(2) on both tracks
 ```
 
-`group.add(track [, track...])`
+### `group.add(tracks)`
 
 Add one or more tracks to an existing group. Provide each track as an argument to `add`.
 
-`group.remove(track [, track...])`
+### `group.remove(tracks)`
 
 Remove one or more tracks to an existing group. Provide each track as an argument to `remove`.
