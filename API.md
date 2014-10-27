@@ -1,4 +1,64 @@
 ## A sequence-based performance API
+
+[**Clock**](https://github.com/kylestetz/lissajous/blob/master/API.md#clocktempo)
+[**Track API**](https://github.com/kylestetz/lissajous/blob/master/API.md#track-api)
+- [`track.beat(steps)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackbeatsteps-sequencer)
+- [`track.beat32(steps)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackbeat32steps-sequencer)
+- [`track.vol(amounts)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackvolamounts-sequencer)
+- [`track.notes(notes)`](https://github.com/kylestetz/lissajous/blob/master/API.md#tracknotesnotes-sequencer)
+- [`track.nl(steps)`](https://github.com/kylestetz/lissajous/blob/master/API.md#tracknlsteps-sequencer)
+- [`track.nl32(steps)`](https://github.com/kylestetz/lissajous/blob/master/API.md#tracknl32steps-sequencer)
+- [`track.trans(amount)`](https://github.com/kylestetz/lissajous/blob/master/API.md#tracktransamount)
+- [`track.shift(steps)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackshiftsteps)
+- [ `track.pan(amounts)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackpanamounts-sequencer)
+- [`track.sine()`](https://github.com/kylestetz/lissajous/blob/master/API.md#tracksine)
+- [`track.square()`](https://github.com/kylestetz/lissajous/blob/master/API.md#tracksquare)
+- [`track.saw()`](https://github.com/kylestetz/lissajous/blob/master/API.md#tracksaw)
+- [`track.tri()`](https://github.com/kylestetz/lissajous/blob/master/API.md#tracktri)
+- [`track.type(types)`](https://github.com/kylestetz/lissajous/blob/master/API.md#tracktypetypes-sequencer)
+- [`track.adsr(attack, decay, sustain, release)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackadsrattack-decay-sustain-release-sequencer)
+- [`track.adsr32(attack, decay, sustain, release)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackadsr32attack-decay-sustain-release-sequencer)
+
+Samples
+- [`track.sample(samples)`](https://github.com/kylestetz/lissajous/blob/master/API.md#tracksamplesamples)
+- [`track.addsamples(samples)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackaddsamplessamples)
+- [`track.select(index)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackselectindex)
+- [`track.sseq(indices)`](https://github.com/kylestetz/lissajous/blob/master/API.md#tracksseqindices-sequencer)
+- [`track.clamp([begin,] end)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackclampbegin-end)
+- [`track.clshift(amounts)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackclshiftamounts-sequencer)
+- [`track.loop(boolean)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackloopboolean)
+- [`track.stretch(amounts)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackstretchamounts-sequencer)
+- [`track.speed(amount)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackspeedamount)
+- [`track.reverse()`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackreverse)
+- [`track.root(note)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackrootnote)
+- [`track.render(length)` `experimental`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackrenderlength-experimental)
+- [`track.render32(length)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackrender32length)
+- [`track.eval(strings)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackevalstrings-sequencer)
+
+[Deferred calls with `in`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackintime)
+
+Filter/Filter Envelope
+- [`track.lp(freq, res, amt)`](https://github.com/kylestetz/lissajous/blob/master/API.md#tracklpfreq-res-amt)
+- [`track.hp(freq, res, amt)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackhpfreq-res-amt)
+- [`track.bp(freq, res, amt)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackbpfreq-res-amt)
+- [`track.notch(freq, res, amt)`](https://github.com/kylestetz/lissajous/blob/master/API.md#tracknotchfreq-res-amt)
+- [`track.ffreq(frequencies)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackffreqfrequencies-sequencer)
+- [`track.fres(resonances)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackfresresonances-sequencer)
+- [`track.famt(amounts)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackfamtamounts-sequencer)
+- [`track.fenv(attack, decay, sustain, release)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackfenvattack-decay-sustain-release-sequencer)
+
+Effects
+- [`track.delay(time [, feedback, level])`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackdelaytime--feedback-level)
+- [`track.dtime(steps)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackdtimesteps-sequencer)
+- [`track.dfb(amounts)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackdfbamounts-sequencer)
+- [`track.dlevel(amount)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackdlevelamount-sequencer)
+- [`track.chorus(rate [, feedback, delay])`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackchorusrate--feedback-delay)
+- [`track.tremolo(rate [, intensity, stereoPhase])`](https://github.com/kylestetz/lissajous/blob/master/API.md#tracktremolorate--intensity-stereophase)
+
+[**Groups API**](https://github.com/kylestetz/lissajous/blob/master/API.md#groups-api)
+- [`group.add`]()
+- [`group.remove`]()
+
 Many of the parameters of a track can be sequenced. A sequence is just a list of values- for example, if we wanted to make a sequence of notes, we would say `track.notes(64, 60, 62, 72)`... At every beat of the track the parameter would adopt the next value in the array, looping back around to 0 when it reaches the end.
 
 Functions with the `(sequencer)` tag accept any number of arguments. They also accept any number of arrays as arguments, which will be flattened automatically into one long array. Cool!
@@ -12,6 +72,8 @@ The clock object is what makes the world of lissajous tick. Simply change clock.
 clock.tempo = 120
 clock.tempo = 90
 ```
+
+## Track API
 
 ### `track.beat(steps)` `(sequencer)`
 Tracks need a beat to generate sound. A beat is a step sequencer pattern expressed in 16th notes. It loops through its pattern indefinitely.
@@ -268,6 +330,33 @@ t.eval('delay(1)', 'delay()') // toggles the delay on and off each beat
 t.eval('delay(1).chorus()', 'delay().chorus(0.5,0.9,0)')
 ```
 
+### `track.in(time)...`
+
+The `in` feature allows API calls to be made at a point in the future specified in 16th notes. Any API calls after `in` are deferred by the amount given:
+
+```javascript
+var t = new track()
+t.beat(4).notes(64)
+t.in(16).notes(67) // in 16 beats call `notes(67)`
+```
+
+Consecutive calls to `in` are _additive_, allowing you to chain long timelines together:
+
+```javascript
+var t = new track()
+t.beat(4).notes(64)
+// in 16 switch the note to 66. In another
+// 16 after that, switch the note to 68.
+t.in(16).notes(66).in(16).notes(68)
+```
+
+A special `_` property is available after a call to `in` which allows you to break out of the current timeline and back to immediate calls. Here's an example using `track.log`, which just console logs the input.
+
+```javascript
+var t = new track()
+t.log('called now').in(16).log('16 beats later')._.log('also called now')
+```
+
 ## Polyphonic Filter Envelope
 Each track comes with a note-triggered filter envelope. While the track is technically monophonic (in that only one note can be played at a given moment using `track.beat`), the notes can overlap and each note gets its own instance of the filter envelope.
 
@@ -365,3 +454,25 @@ The tremolo effect from [Tuna.js](https://github.com/Dinahmoe/tuna).
 - `rate`: frequency in Hz
 - `intensity`: 0 - 1
 - `stereoPhase`: 0 - 180
+
+## Groups API
+
+Tracks can be grouped together. Groups have an API identical to tracks, but the function will be called once for each track in the group.
+
+`group`
+
+```javascript
+var t1 = new track()
+var t2 = new track()
+var g = new group(t1, t2)
+
+g.beat(2) // calls beat(2) on both tracks
+```
+
+`group.add(track [, track...])`
+
+Add one or more tracks to an existing group. Provide each track as an argument to `add`.
+
+`group.remove(track [, track...])`
+
+Remove one or more tracks to an existing group. Provide each track as an argument to `remove`.
