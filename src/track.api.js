@@ -270,7 +270,7 @@ track.prototype.sseq = function() {
   var arguments = _parseArguments(arguments);
   // safeguard against errors for indices past the available length
   for(var i = 0; i < arguments.length; i++) {
-    if(arguments[i] > self._samples.length) {
+    if(arguments[i] >= self._samples.length) {
       arguments[i] = self._samples.length - 1;
     }
   }
