@@ -4,3 +4,4 @@ environment/samples
 environment/samples/
 environment/reason/
 notes.md
+node_modules/

@@ -28,13 +28,16 @@ function ri(min, max) {
 // interpolate between two numbers over several steps.
 // hang out at the `end` value once it is reached.
 
-function step(start, end, iterations) {
+function step(start, end, iterations, repeat) {
   var current = start;
   var _step = (end - start) / iterations;
   var begin = true;
   return function() {
-    if(current === end) {
+    if(current === end && !repeat) {
       return end;
+    } else if(current === end && repeat) {
+      current = start;
+      return current;
     }
     if(begin) {
       begin = false;
