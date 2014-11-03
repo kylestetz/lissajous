@@ -3,6 +3,28 @@ function track() {
   var self = this;
   clock.addTrack(self);
 
+  function _findByName(variable) {
+
+  }
+
+  var _trackArgs = Array.prototype.slice.call(arguments);
+  // reflection...!
+  setTimeout( function() {
+    for (var prop in window) {
+      if (self === window[prop]) {
+        self._name = prop;
+        // just for our remote users out there in the world
+        if(self._announce) {
+          if(_trackArgs.length && _trackArgs[0].calledFromRemote) {
+            // don't announce! this would cause a feedback loop.
+          } else {
+            self._announce(self._name);
+          }
+        }
+      }
+    }
+  }, 0);
+
   // our destination will be the last thing the audio goes through
   // before it is split.
   // self._destination = context.createGain();
@@ -291,7 +313,7 @@ function track() {
   // ---------------------------------------------------            ---------------
 
   // if there are arguments they are samples!
-  if(arguments.length) {
+  if(arguments.length && !arguments[0].calledFromRemote) {
     self.sample.apply(self, arguments);
   }
 
