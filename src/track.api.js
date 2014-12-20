@@ -184,7 +184,7 @@ track.prototype.adsr = function() {
   var resolutionModifier = clock.bpmResolution / 16;
   // arguments isn't really an array so we have to turn it into one
   var arguments = Array.prototype.slice.call(arguments);
-  arguments = _parseArguments(arguments);
+  // arguments = _parseArguments(arguments);
   self._applyAdsrArguments(arguments, resolutionModifier);
   return self;
 };
@@ -194,7 +194,7 @@ track.prototype.adsr32 = function() {
   var resolutionModifier = clock.bpmResolution / 32;
   // arguments isn't really an array so we have to turn it into one
   var arguments = Array.prototype.slice.call(arguments);
-  arguments = _parseArguments(arguments);
+  // arguments = _parseArguments(arguments);
   self._applyAdsrArguments(arguments, resolutionModifier);
   return self;
 };
@@ -206,6 +206,10 @@ track.prototype._applyAdsrArguments = function(args, resolutionModifier) {
     args = args.map( function(arg) {
       // for some reason these were refs to the same array or something?
       arg = Array.prototype.slice.call(arg);
+      // we don't want silly errors
+      if(arg.length < 4) {
+        return [0, 0, 1 * resolutionModifier, 0];
+      }
       arg[0] *= resolutionModifier;
       arg[1] *= resolutionModifier;
       // arg[2] is sustain, don't modify it
