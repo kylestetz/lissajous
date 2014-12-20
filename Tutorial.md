@@ -4,7 +4,21 @@ This document will take you through the complexities of Lissajous one step at a 
 
 Functional programming is a big part of Lissajous so we'll be trying out Lissajous' generator functions at every step. If you've never encountered functional programming in Javascript [this chapter of Eloquent Javascript](http://eloquentjavascript.net/1st_edition/chapter6.html) is a great place to start.
 
+If you have comments or suggestions about this tutorial, please open [issues](https://github.com/kylestetz/lissajous/issues)!
+
 _If you are a veteran of Javascript, note that the term *generator* does not refer to ES6 generator functions. Same concept, different implementation._
+
+[**Rhythm with Oscillators**](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#rhythm-with-oscillators)
+- [What is a beat?](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#what-is-a-beat)
+- [How can I randomize a beat?](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#how-can-i-randomize-a-beat)
+
+[**Playing Notes with Oscillators**](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#playing-notes-with-oscillators)
+- [How do I play a melody?](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#how-do-i-play-a-melody)
+- [What tools are available to work with notes?](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#what-tools-are-available-to-work-with-notes)
+- [How do I randomize notes in a scale?](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#how-do-i-randomize-notes-in-a-scale)
+
+[**Controlling the Oscillator**](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#controlling-the-oscillator)
+- [What oscillator types are available?](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#what-oscillator-types-are-available)
 
 ## Rhythm with Oscillators
 
