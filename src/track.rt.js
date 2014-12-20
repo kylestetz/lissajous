@@ -30,7 +30,12 @@ function _RT() {
       console.log(data.track + '.' + data.fn + '(' + _args.toString() + ')');
     });
 
+    self.socket.on('eval', function(data) {
+      console.log(data.eval);
+    });
+
     self.addAnnounce();
+    self.addRun();
 
     return this;
   };
@@ -68,6 +73,14 @@ function _RT() {
       window[data.track][data.fn].apply(window[data.track], [_args, 'LJ_REMOTE_FN_CALL']);
     });
 
+    // the global "run" command runs `eval` in the local window scope
+    // on the other machine.
+    self.socket.on('eval', function(data) {
+      // heh
+      console.log(data.eval);
+      eval(data.eval);
+    });
+
     self.addAnnounce();
   };
 
@@ -80,6 +93,13 @@ function _RT() {
       window[data.name] = new track({ calledFromRemote: true });
       console.log('var ' + data.name + ' = new track()');
     });
+  };
+
+  self.addRun = function() {
+    window.run = function(command) {
+      self.socket.emit('eval', { eval: command });
+      console.log(command);
+    };
   };
 }
 
