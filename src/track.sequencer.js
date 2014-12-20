@@ -7,7 +7,7 @@ function Sequencer(callback) {
 
 Sequencer.prototype.set = function(arguments) {
   var self = this;
-  self.pattern = arguments;
+  self.pattern = Array.prototype.slice.call(arguments);
   // this could change but for now let's reset the step when the pattern changes
   self.currentStep = 0;
 };
