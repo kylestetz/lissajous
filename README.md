@@ -15,11 +15,15 @@ Requires the latest stable Chrome build & a relatively recent OS. If you have yo
 - [03 - "synths"](https://www.youtube.com/watch?v=degtBGL2TDY)
 - [04 - "random walk"](https://www.youtube.com/watch?v=4Krk9ujQwQk)
 
-In order to run Lissajous locally you have to have a copy of the lissajous environment on your machine. Do this by pulling down this repo: `git clone git@github.com:kylestetz/lissajous.git` and opening the file `/environment/index.html`. The environment doesn't contain any samples- add an `/environment/samples/` folder (ignored by git) and add samples via `/environment/extras.js`!
+#### Read the [Tutorial](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md)
+The tutorial is a work in progress but already serves as great starting point for new performers!
 
 #### [View the Performance API Documentation](https://github.com/kylestetz/lissajous/blob/master/API.md)
 
-#### This is what Lissajous looks like
+#### Get a local copy
+In order to run Lissajous locally you have to have a copy of the lissajous environment on your machine. Do this by pulling down this repo: `git clone git@github.com:kylestetz/lissajous.git` and opening the file `/environment/index.html`. The environment doesn't contain any samples- add an `/environment/samples/` folder (ignored by git) and add samples via `/environment/extras.js`!
+
+### This is what Lissajous looks like
 
 ```javascript
 // make a triangle wave that loops the notes 69, 67, then 60 in quarter note intervals
@@ -115,6 +119,8 @@ t.clamp(0, 1/16).loop(1)
 // shift the clamp points by -1/16th of the sample size every beat
 t.clshift(-1/16)
 ```
+
+-----------------------
 
 #### Todos
 - Develop a technique that would make smooth LFOs possible
