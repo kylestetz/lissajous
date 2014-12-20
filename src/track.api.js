@@ -10,14 +10,15 @@ function _joinArgs(args) {
 }
 
 // _parseArguments takes multiple array arguments and stitches them into a one-dimensional array.
-function _parseArguments(args) {
-  if(Array.isArray(args[0])) {
-    args = _joinArgs(args);
-  }
-  return args;
-}
+// function _parseArguments(args) {
+//   if(Array.isArray(args[0])) {
+//     args = _joinArgs(args);
+//   }
+//   return args;
+// }
 
-function flattenArguments(args) {
+// new method of array flattening
+function _parseArguments(args) {
   args = Array.prototype.slice.call(args);
   var flattened = [];
   args.forEach( function(item) {
