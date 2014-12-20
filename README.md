@@ -4,10 +4,10 @@
 
 Lissajous is a tool for real time audio performance using Javascript. It wraps succinct tools for creating oscillators and samplers into a chainable API, allowing performers to build and improvise songs with a minimum of code.
 
-Lissajous exists entirely within the Javascript console & was designed for use with Google Chrome.
+Lissajous exists entirely within the Javascript console & was designed for use with Google Chrome or Firefox.
 
 #### [Play with Lissajous](http://lissajousjs.com)
-Requires the latest stable Chrome build & a relatively recent OS. If you have your own .wav files you can drop them in the window to load them into the environment!
+Requires the latest stable Chrome or Firefox build & a relatively recent OS. If you have your own .wav files you can drop them in the window to load them into the environment!
 
 #### Watch a few demo videos
 - [01 - "performance"](https://www.youtube.com/watch?v=jBRqOp5ws58)
