@@ -59,7 +59,7 @@ track.prototype._makeSampler = function(noteStart, noteEnd) {
     sound.start(noteStart);
     sound.stop(newNoteEnd);
   }
-}
+};
 
 
 // We want to support multiple samples per track,
@@ -72,15 +72,8 @@ track.prototype._makeSampler = function(noteStart, noteEnd) {
 function Sample(buffer) {
   var self = this;
   self.buffer = buffer;
-  self.speed = 1;
-  self.stretchToFit = null;
-  self.looping = false;
-  self.loopStart = 0;
-  self.loopEnd = 1;
-  self.clampShift = 0;
-  self.rootNote = 69;
-  self.currentNote = 69;
-  self.hasNoteSequence = false;
+  // give the sample some parameters
+  self.defaultParams();
   // sample sequencers are triggered automatically by the beatPattern scheduler.
   self.sequencers = [];
   self.clampShiftSequencer = new Sequencer( function(value) {
@@ -115,9 +108,31 @@ Sample.prototype.update = function() {
   } else if(self.stretchToFit) {
     self.speed = self.buffer.duration / ( clock.noteLength() * self.stretchToFit );
   }
-}
+};
+
+Sample.prototype.getBeatLength = function(overflow) {
+  var self = this;
+  if(overflow !== false && overflow !== 0) {
+    overflow = true;
+  }
+  var notes = self.buffer.duration / clock.noteLength();
+  return overflow ? Math.ceil(notes) : Math.floor(notes);
+};
 
 Sample.prototype.setNote = function(note) {
   var self = this;
   self.currentNote = note;
-}
+};
+
+Sample.prototype.defaultParams = function() {
+  var self = this;
+  self.speed = 1;
+  self.stretchToFit = null;
+  self.looping = false;
+  self.loopStart = 0;
+  self.loopEnd = 1;
+  self.clampShift = 0;
+  self.rootNote = 69;
+  self.currentNote = 69;
+  self.hasNoteSequence = false;
+};
