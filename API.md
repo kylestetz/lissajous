@@ -22,6 +22,7 @@
 
 Samples
 - [`track.sample(samples)`](https://github.com/kylestetz/lissajous/blob/master/API.md#tracksamplesamples)
+- [`track.play(overflow)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackplayoverflow)
 - [`track.addsamples(samples)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackaddsamplessamples)
 - [`track.select(index)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackselectindex)
 - [`track.sseq(indices)`](https://github.com/kylestetz/lissajous/blob/master/API.md#tracksseqindices-sequencer)
@@ -196,6 +197,18 @@ Each sample has its own set of properties including loop points, speed, and note
 Load samples into a track. Accepts standard `AudioBuffer` objects.
 
 Calling this with arguments will remove any samples associated with the track and create a new list. Calling it with no arguments will unset any existing samples on the track.
+
+### `track.play(overflow)`
+Play a sample at its normal rate, setting the beat and note length automatically. This is the simplest way to make noise with a sample— if you are just getting started, use this!
+
+`play` uses the duration of the sample to set the `beat` length. If the duration isn't perfectly divisible by the tempo, there will be a remainder left. The `overflow` argument determines whether to cut off the remainder or keep it and quantize to the next beat. By default it keeps the remainder and quantizes further out; to cut the remainder, pass `0` or `false` into `play`.
+
+```javascript
+var t = new track(mySample)
+t.play()
+// play the sample but cut off any remainder left after quantizing the beat
+t.play(0)
+```
 
 ### `track.addsamples(samples)`
 Adds additional samples to a track (versus calling `track.sample(samples)`, which removes all existing samples first). Accepts standard `AudioBuffer` objects.
