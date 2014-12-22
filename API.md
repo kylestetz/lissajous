@@ -61,6 +61,8 @@ Effects
 - [`group.add`](https://github.com/kylestetz/lissajous/blob/master/API.md#groupaddtracks)
 - [`group.remove`](https://github.com/kylestetz/lissajous/blob/master/API.md#groupremovetracks)
 
+[Generators]()
+
 ### What is a sequence?
 
 Many of the parameters of a track can be sequenced. A sequence is just a list of values- for example, if we wanted to make a sequence of notes, we would say `track.notes(64, 60, 62, 72)`... At every beat of the track the parameter would adopt the next value in the array, looping back around to 0 when it reaches the end.
@@ -500,3 +502,69 @@ Add one or more tracks to an existing group. Provide each track as an argument t
 ### `group.remove(tracks)`
 
 Remove one or more tracks to an existing group. Provide each track as an argument to `remove`.
+
+## Generators
+
+Generators are helper functions that make it easier to randomize and interpolate between values dynamically. On a technically level they implement the factory pattern— calling a generator function returns a new function that uses the parameters provided.
+
+All track functions with the `(sequencer)` tag can accept generator functions as arguments.
+
+_Note: Though conceptually similar, generators in Lissajous are not implemented using Javascript ES6 generators._
+
+### `ri(min, max)`
+
+**Random Integer**. Min and max are _inclusive_ (meaning that `ri(0,2)` could result in `0`, `1`, or `2`). If only one argument is provided it will be used as the `max` and `min` will be set to 0.
+
+```javascript
+var t = new track()
+// play a random note between 64 and 72
+t.beat(4).notes( ri(64, 72) )
+```
+
+### `rf(min, max)`
+
+**Random Float**. Min and max are _inclusive_. If only one argument is provided it will be used as the `max` and `min` will be set to 0.
+
+```javascript
+var t = new track()
+// make the volume random on each note
+t.beat(4).vol( rf(0, 1) )
+```
+
+### `step(start, end, iterations [, repeat])`
+
+Interpolate between start and end values over a specific number of iterations. If the `repeat` flag is set (using either `true` or `1`) the sequence will start over again when it finishes. `repeat` is off by default.
+
+```javascript
+var t = new track()
+t.beat(1)
+// use step to fade the volume out over 32 notes
+t.vol( step(1,0,32) )
+// use step to pan left to right (repeating)
+t.pan( step(-1, 1, 16, true) )
+```
+
+### `bounce(start, end, iterations)`
+
+Interpolate between start and end values over a specified number of iterations, switching directions at each end. Creates a "ping pong" effect.
+
+```javascript
+var t = new track()
+t.beat(1)
+// bounce the pan back and forth between left and right sides
+t.pan( step(-1, 1, 16) )
+```
+
+### `walk.<chord>(rootNote [, numberOfOctaves])`
+
+Generate random notes within a scale starting at a root note, optionally covering multiple octaves.
+
+The `walk` object contains 86 different functions representing scales: `naturalmajor`, `ionian`, `major`, `chromatic`, `spanish8tone`, `flamenco`, `symmetrical`, `inverteddiminished`, `diminished`, `wholetone`, `augmented`, `semitone3`, `semitone4`, `locrianultra`, `locriansuper`, `indian`, `locrian`, `phrygian`, `neapolitanminor`, `javanese`, `neapolitanmajor`, `todi`, `persian`, `oriental`, `phrygianmajor`, `spanish`, `jewish`, `doubleharmonic`, `gypsy`, `byzantine`, `chahargah`, `marva`, `enigmatic`, `locriannatural`, `naturalminor`, `minor`, `melodicminor`, `aeolian`, `algerian2`, `hungarianminor`, `algerian`, `algerian1`, `harmonicminor`, `mohammedan`, `dorian`, `hungariangypsy`, `romanian`, `locrianmajor`, `arabian`, `hindu`, `ethiopian`, `mixolydian`, `mixolydianaugmented`, `harmonicmajor`, `lydianminor`, `lydiandominant`, `overtone`, `lydian`, `lydianaugmented`, `leadingwholetone`, `blues`, `hungarianmajor`, `pb`, `balinese`, `pe`, `pelog`, `iwato`, `japanese`, `kumoi`, `hirajoshi`, `pa`, `pd`, `pentatonic`, `chinese`, `chinese1`, `mongolian`, `pfcg`, `egyptian`, `pentatonic`, `chinese2`, `altered`, `bebopdominant`, `bebopdominantflatnine`, `bebopmajor`, `bebopminor`, and `beboptonicminor`.
+
+```javascript
+var t = new track()
+// random notes along the major scale in Middle C
+t.beat(4).notes( walk.major(64) )
+// random notes along the minor scale across 3 octaves starting at Middle A
+t.notes( walk.minor(69, 3) )
+```
