@@ -61,7 +61,12 @@ Effects
 - [`group.add`](https://github.com/kylestetz/lissajous/blob/master/API.md#groupaddtracks)
 - [`group.remove`](https://github.com/kylestetz/lissajous/blob/master/API.md#groupremovetracks)
 
-[Generators]()
+[Generators](https://github.com/kylestetz/lissajous/blob/master/API.md#generators)
+- [`ri(min, max)`](https://github.com/kylestetz/lissajous/blob/master/API.md#rimin-max)
+- [`rf(min, max)`](https://github.com/kylestetz/lissajous/blob/master/API.md#rfmin-max)
+- [`step(start, end, iterations [, repeat])`](https://github.com/kylestetz/lissajous/blob/master/API.md#stepstart-end-iterations--repeat)
+- [`bounce(start, end, iterations)`](https://github.com/kylestetz/lissajous/blob/master/API.md#bouncestart-end-iterations)
+- [`walk.<chord>(rootNote [, numberOfOctaves])`](https://github.com/kylestetz/lissajous/blob/master/API.md#walkchordrootnote--numberofoctaves)
 
 ### What is a sequence?
 
@@ -559,7 +564,9 @@ t.pan( step(-1, 1, 16) )
 
 Generate random notes within a scale starting at a root note, optionally covering multiple octaves.
 
-The `walk` object contains 86 different functions representing scales: `naturalmajor`, `ionian`, `major`, `chromatic`, `spanish8tone`, `flamenco`, `symmetrical`, `inverteddiminished`, `diminished`, `wholetone`, `augmented`, `semitone3`, `semitone4`, `locrianultra`, `locriansuper`, `indian`, `locrian`, `phrygian`, `neapolitanminor`, `javanese`, `neapolitanmajor`, `todi`, `persian`, `oriental`, `phrygianmajor`, `spanish`, `jewish`, `doubleharmonic`, `gypsy`, `byzantine`, `chahargah`, `marva`, `enigmatic`, `locriannatural`, `naturalminor`, `minor`, `melodicminor`, `aeolian`, `algerian2`, `hungarianminor`, `algerian`, `algerian1`, `harmonicminor`, `mohammedan`, `dorian`, `hungariangypsy`, `romanian`, `locrianmajor`, `arabian`, `hindu`, `ethiopian`, `mixolydian`, `mixolydianaugmented`, `harmonicmajor`, `lydianminor`, `lydiandominant`, `overtone`, `lydian`, `lydianaugmented`, `leadingwholetone`, `blues`, `hungarianmajor`, `pb`, `balinese`, `pe`, `pelog`, `iwato`, `japanese`, `kumoi`, `hirajoshi`, `pa`, `pd`, `pentatonic`, `chinese`, `chinese1`, `mongolian`, `pfcg`, `egyptian`, `pentatonic`, `chinese2`, `altered`, `bebopdominant`, `bebopdominantflatnine`, `bebopmajor`, `bebopminor`, and `beboptonicminor`.
+Autocomplete in the Chrome and Firefox consoles comes in handy when messing around with `walk`!
+
+The `walk` object contains 86 different functions representing scales: `aeolian`, `algerian`, `algerian1`, `algerian2`, `altered`, `arabian`, `augmented`, `balinese`, `bebopdominant`, `bebopdominantflatnine`, `bebopmajor`, `bebopminor`, `beboptonicminor`, `blues`, `byzantine`, `chahargah`, `chinese`, `chinese1`, `chinese2`, `chromatic`, `diminished`, `dorian`, `doubleharmonic`, `egyptian`, `enigmatic`, `ethiopian`, `flamenco`, `gypsy`, `harmonicmajor`, `harmonicminor`, `hindu`, `hirajoshi`, `hungariangypsy`, `hungarianmajor`, `hungarianminor`, `indian`, `inverteddiminished`, `ionian`, `iwato`, `japanese`, `javanese`, `jewish`, `kumoi`, `leadingwholetone`, `locrian`, `locrianmajor`, `locriannatural`, `locriansuper`, `locrianultra`, `lydian`, `lydianaugmented`, `lydiandominant`, `lydianminor`, `major`, `marva`, `melodicminor`, `minor`, `mixolydian`, `mixolydianaugmented`, `mohammedan`, `mongolian`, `naturalmajor`, `naturalminor`, `neapolitanmajor`, `neapolitanminor`, `oriental`, `overtone`, `pa`, `pb`, `pd`, `pe`, `pelog`, `pentatonic`, `pentatonic`, `persian`, `pfcg`, `phrygian`, `phrygianmajor`, `romanian`, `semitone3`, `semitone4`, `spanish`, `spanish8tone`, `symmetrical`, `todi`, and `wholetone`.
 
 ```javascript
 var t = new track()
