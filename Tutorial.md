@@ -21,6 +21,8 @@ _If you are a veteran of Javascript, note that the term *generator* does not ref
 
 [**Controlling the Oscillator**](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#controlling-the-oscillator)
 - [What oscillator types are available?](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#what-oscillator-types-are-available)
+- [How do I change the note length and amp envelope?](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#how-do-i-change-the-note-length-and-amp-envelope)
+- [How do I pan left and right?](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#how-do-i-pan-left-and-right)
 
 ## Rhythm with Oscillators
 
