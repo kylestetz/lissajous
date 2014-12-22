@@ -47,6 +47,26 @@ function step(start, end, iterations, repeat) {
   };
 }
 
+// interpolate between two numbers, ping ponging back and forth.
+
+function bounce(start, end, iterations) {
+  if(start === undefined || end === undefined || !iterations) {
+    return function() { return 0; };
+  }
+
+  iterations--;
+  var current = 0;
+  var direction = -1;
+  return function() {
+    var result = start + (current * ( (end - start) / iterations ));
+    if(current === 0 || current === iterations ) {
+      direction *= -1;
+    }
+    current += direction;
+    return result;
+  };
+}
+
 // ============================================================
 // WALK
 // ============================================================
