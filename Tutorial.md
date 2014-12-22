@@ -6,6 +6,8 @@ Functional programming is a big part of Lissajous so we'll be trying out Lissajo
 
 If you have comments or suggestions about this tutorial, please open [issues](https://github.com/kylestetz/lissajous/issues)!
 
+The [API Documentation](https://github.com/kylestetz/lissajous/blob/master/API.md) serves as a great companion to this tutorial.
+
 _If you are a veteran of Javascript, note that the term *generator* does not refer to ES6 generator functions. Same concept, different implementation._
 
 [**Rhythm with Oscillators**](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#rhythm-with-oscillators)
@@ -72,6 +74,8 @@ Beats can also be expressed in 32nd notes using the `beat32` function. Same rule
 t = new track()
 t.beat32(1,2,3)
 ```
+
+If you are managing multiple tracks and you started one slightly off-time, the `shift` function is a handy way to shift the phase of the beat pattern. Calling `track.shift(1)` will delay the beat pattern by 1/16th note.
 
 ### How can I randomize a beat?
 
@@ -234,3 +238,51 @@ t.beat(4).type(0,1,2,3)
 
 ### How do I change the note length and amp envelope?
 
+Aside from their monophonic `beat` API, tracks are polyphonic and their notes can overlap with each other. Note length is set using the `nl` function, which accepts 1/16th note multiples, or the `nl32` function, which accepts 32nd note multiples. Note length is 1/16th note by default.
+
+```javascript
+var t = new track()
+t.beat(4).nl(2)
+// note length can be sequenced
+t.nl(3,2,1)
+```
+
+Each note gets its own amplitude envelope. The function `adsr` represents Attack Decay Sustain and Release. Attack, decay, and release take multiples of 1/16th note, while sustain is an amount from 0 - 1.
+
+```javascript
+var t = new track()
+t.beat(4).nl(2).adsr(1,0,1,1)
+// very small numbers can be used for precise timing
+t.adsr(0.01, 0, 1, 0.1)
+```
+
+Amp envelopes can be sequenced by passing in multiple arrays of length 4.
+
+```javascript
+var t = new track()
+t.beat(4).adsr([0,1,0,0], [0.01,0,1,1])
+// you can also save envelopes as variables
+var e1 = [0.5,0.5,0,0];
+var e2 = [0,0,1,1];
+t.adsr(e1, e2);
+```
+
+`adsr32` works exactly the same but accepts 1/32nd note multiples for attack, decay, and release.
+
+### How do I pan left and right?
+
+The `pan` function accepts a number from -1 to 1 where -1 is full left, 1 is full right, and 0 is center. `pan` accepts sequences.
+
+```javascript
+var t = new track()
+t.beat(4)
+// full left
+t.pan(-1)
+// full right
+t.pan(1)
+// center (default)
+t.pan(0)
+
+// sequences
+t.pan(-1, -.5, 0, .5, 1)
+```
