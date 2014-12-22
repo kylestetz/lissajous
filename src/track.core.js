@@ -103,10 +103,10 @@ function track() {
   self._release = 0.01;
 
   self._adsrSequencer = new Sequencer( function(value) {
-    self._attack = value[0];
-    self._decay = value[1];
-    self._sustain = value[2];
-    self._release = value[3];
+    self._attack  = (typeof(value[0]) === 'number') ? value[0] : value[0]();
+    self._decay   = (typeof(value[1]) === 'number') ? value[1] : value[1]();
+    self._sustain = (typeof(value[2]) === 'number') ? value[2] : value[2]();
+    self._release = (typeof(value[3]) === 'number') ? value[3] : value[3]();
   });
   self._attachSequencers(self._adsrSequencer);
   // ---------------------------------------------------

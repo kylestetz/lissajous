@@ -201,6 +201,19 @@ track.prototype.adsr32 = function() {
 
 track.prototype._applyAdsrArguments = function(args, resolutionModifier) {
   var self = this;
+
+  // a helper function
+  function modify(arg) {
+    if(typeof(arg) === 'number') {
+      return arg * resolutionModifier;
+    } else if(typeof(arg) === 'function') {
+      // wrap the callback in our own that multiplies it by the res modifier
+      return function() {
+        return arg() * resolutionModifier;
+      };
+    }
+  }
+
   // if we get an array as a first argument, we will assume all args are arrays.
   if(args.length > 0 && Array.isArray(args[0])) {
     args = args.map( function(arg) {
@@ -210,20 +223,20 @@ track.prototype._applyAdsrArguments = function(args, resolutionModifier) {
       if(arg.length < 4) {
         return [0, 0, 1 * resolutionModifier, 0];
       }
-      arg[0] *= resolutionModifier;
-      arg[1] *= resolutionModifier;
-      // arg[2] is sustain, don't modify it
-      arg[3] *= resolutionModifier;
+      arg[0] = modify(arg[0]);
+      arg[1] = modify(arg[1]);
+      // sustain does not get modified
+      arg[3] = modify(arg[3]);
       return arg;
     });
     self._adsrSequencer.set(args);
   }
   // ...or it's just four values.
   else if(args.length == 4) {
-    args[0] *= resolutionModifier;
-    args[1] *= resolutionModifier;
-    // args[2] is sustain, don't modify it
-    args[3] *= resolutionModifier;
+    args[0] = modify(args[0]);
+    args[1] = modify(args[1]);
+    // sustain does not get modified
+    args[3] = modify(args[3]);
     self._adsrSequencer.set([args]);
   }
   // back to the defaults
