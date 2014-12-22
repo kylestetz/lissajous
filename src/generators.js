@@ -26,24 +26,24 @@ function ri(min, max) {
 }
 
 // interpolate between two numbers over several steps.
-// hang out at the `end` value once it is reached.
+// hang out at the `end` value once it is reached unless it repeats.
 
 function step(start, end, iterations, repeat) {
-  var current = start;
-  var _step = (end - start) / iterations;
-  var begin = true;
+  // safeguard against bad usage by returning zero
+  if(start === undefined || end === undefined || !iterations) {
+    return function() { return 0; };
+  }
+
+  iterations--;
+  var current = -1;
   return function() {
-    if(current === end && !repeat) {
-      return end;
-    } else if(current === end && repeat) {
-      current = start;
-      return current;
+    if(current === iterations && !repeat) {
+      return start + (current * ( (end - start) / iterations ));
+    } else if(current === iterations && repeat) {
+      current = -1;
     }
-    if(begin) {
-      begin = false;
-      return start;
-    }
-    return current += _step;
+    current++;
+    return start + (current * ( (end - start) / iterations ));
   };
 }
 
