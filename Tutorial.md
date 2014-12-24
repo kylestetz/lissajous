@@ -288,3 +288,44 @@ t.pan(0)
 // sequences
 t.pan(-1, -.5, 0, .5, 1)
 ```
+
+----------
+
+## More Magic with Generators
+
+Before we jump into sample manipulation let's look at the range of generators available to us. They are also documented in the [API Docs](https://github.com/kylestetz/lissajous/blob/master/API.md#generators).
+
+### Really Random Numbers
+
+##### `ri(min, max)`
+##### `rf(min, max)`
+
+Generate random integers or random floats between a min and a max. These are great if you don't care so much about the output and are just looking to make things sound more dynamic. Using `rf` on the volume, for example:
+
+```javascript
+var t = new track()
+t.beat(2).adsr(0,1,0,0).vol( rf(0.5, 1) )
+```
+
+You can also use them multiple times as arguments to set up a loose pattern with some randomness built in:
+
+```javascript
+var t = new track()
+t.beat(2).adsr(0,1,0,0).vol( rf(0,.1), rf(.4,.6), rf(.8,1) )
+```
+
+Functions that work well with `ri`: `beat` and `beat32`, `notes`, `type`, and for working with samples and effects (documented below) `sseq`, `stretch`, `ffreq`, `famt`, and `dtime`.
+
+Functions that work well with `rf`: `vol`, `nl` and `nl32`, `pan`, `adsr` and `adsr32`, and for working with samples and effects (documented below) `clamp`, `cs` (which is aliased as `clshift`), `fres`, `famt`, `dtime`, `dfb`, and `dlevel`.
+
+### Random Numbers With Some Constraints
+
+##### `choice([])`
+##### `walk.<scale>(rootNote [, numOfOctaves])`
+
+### Controlled Movement
+
+##### `step(start, end, iterations [, repeat])`
+##### `bounce(start, end, iterations)`
+
+----------
