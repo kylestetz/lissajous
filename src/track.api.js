@@ -55,7 +55,6 @@ track.prototype.notes = function() {
 track.prototype.nl = function() {
   var self = this;
   var arguments = _parseArguments(arguments);
-  self._noteLengthSequencer.set(arguments);
   if(arguments.length) {
     // nl will be 16th notes, so we need to multiply everything by 2
     for(var i = 0; i < arguments.length; i++) {
@@ -65,6 +64,7 @@ track.prototype.nl = function() {
     // reasonable default -> nl = 16th note
     self._currentNoteLength = 2;
   }
+  self._noteLengthSequencer.set(arguments);
   return self;
 };
 
