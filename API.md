@@ -575,3 +575,13 @@ t.beat(4).notes( walk.major(64) )
 // random notes along the minor scale across 3 octaves starting at Middle A
 t.notes( walk.minor(69, 3) )
 ```
+
+### `choice([])`
+
+Choose a random item from a list.
+
+```javascript
+var t = new track()
+var scale = [64, 65, 69, 71];
+t.beat(2).notes( choice(scale) );
+```
