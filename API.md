@@ -27,7 +27,7 @@ Samples
 - [`track.select(index)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackselectindex)
 - [`track.sseq(indices)`](https://github.com/kylestetz/lissajous/blob/master/API.md#tracksseqindices-sequencer)
 - [`track.clamp([begin,] end)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackclampbegin-end)
-- [`track.clshift(amounts)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackclshiftamounts-sequencer)
+- [`track.clshift(amounts)` -> `track.cs(amounts)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackclshiftamounts-sequencer)
 - [`track.loop(boolean)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackloopboolean)
 - [`track.stretch(amounts)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackstretchamounts-sequencer)
 - [`track.speed(amount)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackspeedamount)
