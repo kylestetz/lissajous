@@ -55,10 +55,23 @@ track.prototype.notes = function() {
 track.prototype.nl = function() {
   var self = this;
   var arguments = _parseArguments(arguments);
+  var resolutionModifier = clock.bpmResolution / 16;
+
+  function modify(arg) {
+    if(typeof(arg) === 'number') {
+      return arg * resolutionModifier;
+    } else if(typeof(arg) === 'function') {
+      // wrap the callback in our own that multiplies it by the res modifier
+      return function() {
+        return arg() * resolutionModifier;
+      };
+    }
+  }
+
   if(arguments.length) {
     // nl will be 16th notes, so we need to multiply everything by 2
     for(var i = 0; i < arguments.length; i++) {
-      arguments[i] *= 2;
+      arguments[i] = modify(arguments[i]);
     }
   } else {
     // reasonable default -> nl = 16th note
@@ -300,9 +313,10 @@ track.prototype.select = function(index) {
 track.prototype.sseq = function() {
   var self = this;
   var arguments = _parseArguments(arguments);
+
   // safeguard against errors for indices past the available length
   for(var i = 0; i < arguments.length; i++) {
-    if(arguments[i] >= self._samples.length) {
+    if(arguments[i] >= self._samples.length && typeof(arguments[i]) === 'number') {
       arguments[i] = self._samples.length - 1;
     }
   }
@@ -347,12 +361,25 @@ track.prototype.loop = function() {
 
 track.prototype.stretch = function() {
   var self = this;
+  resolutionModifier = clock.bpmResolution / 16;
+
+  function modify(arg) {
+    if(typeof(arg) === 'number') {
+      return arg * resolutionModifier;
+    } else if(typeof(arg) === 'function') {
+      // wrap the callback in our own that multiplies it by the res modifier
+      return function() {
+        return arg() * resolutionModifier;
+      };
+    }
+  }
+
   if(self._editingSample) {
     if(arguments.length) {
       // self._editingSample.stretchToFit = arguments[0] * (clock.bpmResolution / 16);
       var arguments = _parseArguments(arguments);
       for(var i = 0; i < arguments.length; i++) {
-        arguments[i] = arguments[i] * (clock.bpmResolution / 16);
+        arguments[i] = modify(arguments[i]);
       }
       self._editingSample.stretchSequencer.set(arguments);
     } else {
