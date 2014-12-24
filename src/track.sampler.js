@@ -84,6 +84,10 @@ function Sample(buffer) {
     self.stretchToFit = value;
   });
   self.sequencers.push(self.stretchSequencer);
+  self.speedSequencer = new Sequencer( function(value) {
+    self.speed = value;
+  });
+  self.sequencers.push(self.speedSequencer);
 }
 
 Sample.prototype.update = function() {

@@ -368,7 +368,8 @@ track.prototype.speed = function() {
   var self = this;
   if(self._editingSample) {
     if(arguments.length) {
-      self._editingSample.speed = arguments[0];
+      self._editingSample.speedSequencer.set(arguments);
+      // self._editingSample.speed = arguments[0];
       self._editingSample.stretchToFit = null;
     } else {
       self._editingSample.speed = 1;
