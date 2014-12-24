@@ -113,6 +113,8 @@ t.vol(0.5, 0.6, 0.7, 0.8, 0.9, 1)
 - `notes`: 0 - 127 (MIDI numbers)
 A sequence of notes to play. The notes are expressed in MIDI number, where 64 is middle C. When playing samples, the root note of the sample determines how the note numbers are interpreted. The root number for a sample can be changed using `track.root(number)`. The default root note for a sample is 69 (A above middle C).
 
+When working with samples, `notes` will override `stretch` and `speed` values.
+
 ```javascript
 var t = new track()
 t.beat(2) // play eighth notes
@@ -279,6 +281,8 @@ Stretches the active sample across the specified number of 1/16th notes. For exa
 
 This will change the pitch of the sample, so it's best used with percussive sounds.
 
+If a track has `notes` on it, they will override `stretch`. `stretch`, in turn, overrides any `speed` given to the track.
+
 ```javascript
 t = new track()
 t.sample(mySample)
@@ -286,10 +290,12 @@ t.beat(12).nl(12)
 t.stretch(12)
 ```
 
-### `track.speed(amount)`
+### `track.speed(amount)` `(sequencer)`
 Sets the speed of the active sample. The amount is specified as a decimal where 1 is the original speed of the sample.
 
 Note that speed and pitch are tied together, so a slower sample will also be pitched lower.
+
+`speed` can be sequenced, however if the track has `notes` or `stretch` applied they will override `speed`.
 
 ```javascript
 var t = new track()
