@@ -35,6 +35,18 @@ _If you are a veteran of Javascript, note that the term *generator* does not ref
 
 **Part 3: Working with Samples**
 
+[**Samples 101**](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#samples-101)
+- [How do I load and play a sample?](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#how-do-i-load-and-play-a-sample)
+- [What is the relationship between notes and samples?](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#what-is-the-relationship-between-notes-and-samples)
+
+[**Modulating Samples**](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#modulating-samples)
+- [How do I change the playback speed of a sample?](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#how-do-i-change-the-playback-speed-of-a-sample)
+- [How do I play a sample using a sequence of MIDI notes?](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#how-do-i-play-a-sample-using-a-sequence-of-midi-notes)
+
+[**Slicing and Dicing Samples**](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#slicing-and-dicing-samples)
+- [How do I change the sample starting and ending points?](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#how-do-i-change-the-sample-starting-and-ending-points)
+- [Can I use granular synthesis techniques?](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#can-i-use-granular-synthesis-techniques)
+
 
 
 ## Rhythm with Oscillators
