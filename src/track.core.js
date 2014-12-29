@@ -315,6 +315,7 @@ track.prototype._detachSequencers = function() {
     var index = this._sequencers.indexOf(arguments[i]);
     if(index > -1) {
       this._sequencers.splice(index, 1);
+      continue;
     }
   }
 }
