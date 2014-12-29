@@ -10,6 +10,8 @@ The [API Documentation](https://github.com/kylestetz/lissajous/blob/master/API.m
 
 _If you are a veteran of Javascript, note that the term *generator* does not refer to ES6 generator functions. Same concept, different implementation._
 
+**Part 1: The Basics**
+
 [**Rhythm with Oscillators**](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#rhythm-with-oscillators)
 - [What is a beat?](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#what-is-a-beat)
 - [How can I randomize a beat?](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#how-can-i-randomize-a-beat)
@@ -23,6 +25,17 @@ _If you are a veteran of Javascript, note that the term *generator* does not ref
 - [What oscillator types are available?](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#what-oscillator-types-are-available)
 - [How do I change the note length and amp envelope?](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#how-do-i-change-the-note-length-and-amp-envelope)
 - [How do I pan left and right?](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#how-do-i-pan-left-and-right)
+
+**Part 2: Generators**
+
+[**More Magic with Generators**](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#more-magic-with-generators)
+- [Really Random Numbers](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#really-random-numbers)
+- [Random Numbers with Some Constraints](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#random-numbers-with-some-constraints)
+- [Controlled Movement](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#controlled-movement)
+
+**Part 3: Working with Samples**
+
+
 
 ## Rhythm with Oscillators
 
@@ -375,3 +388,149 @@ Some great practical applications of `step` _without_ `repeat` include panning f
 `bounce` works well with anything that takes a floating point number: `vol`, `nl`, `nl32`, `pan`, `adsr`, `adsr32`, `clamp`, `cs`, `speed`, `fres`, `famt`, `dtime`, `dfb`, and `dlevel`.
 
 ----------
+
+## Samples 101
+
+In this section we'll look at working with samples— playing them front to back, slicing them, modulating them, and resampling them. Since many of these concepts rely on an understanding of basic tools (`beat`, `nl`, `notes`, etc) it is assumed that you have read the tutorial up to this point! If you're skipping the beginning, have your [API Docs](https://github.com/kylestetz/lissajous/blob/master/API.md) handy and you should be fine.
+
+As you'll soon discover, samples can be used in a number of ways. The two most basic "modes" you'll find yourself in are using samples as loops & texture, or using samples as root notes to be played at different pitches.
+
+### How do I load and play a sample?
+
+**Loading, the hard way**: You can load an array of samples programmatically by using the `loadSamples` function provided by Lissajous, which takes an array of filepaths and a callback providing an array of sample buffers. This is good if you're preparing a performance. See `environment/extras.js` for sample code.
+
+**Loading, the easy way**: Drag a .wav file from your hard drive onto the Lissajous page (the screen will darken) and Lissajous will turn it into a variable containing a sample buffer. The variable name will be based on the filename. It will `console.log` when the variable is ready to use.
+
+In this section we'll assume you have a sample `mySample` available to you. Add it to a track:
+
+```javascript
+// create a track that holds a sample
+var t = new track(mySample)
+
+// or give the sample to an existing track
+var t2 = new track()
+t2.sample(mySample)
+
+// or, if the track already contains some samples
+// and you don't want to overwrite them
+t2.addsample(mySample)
+```
+
+Now that the track contains a sample its oscillators are turned off and the sample will be used to generate sound. Get up and running quickly by calling `play`:
+
+```javascript
+var t = new track(mySample)
+t.play()
+```
+
+`play` will look at the length of the sample and set both `beat` and `nl` to the nearest 32nd note. By default it will quantize to the nearest 32nd note _after_ the sample end. If you want to quantize to the note _before_ the end of the sample, pass `0` into `play`.
+
+### What is the relationship between notes and samples?
+
+Tracks using samples can still take advantage of `beat`, `nl`, and `adsr` independent of what's going on with the sample. By default every note will trigger using the beginning of the sample, but we have control over the sample position using `clamp` and `cs`, which we'll cover next.
+
+Sample speed can be controlled directly using `speed`, or indirectly using `stretch` or a `notes` sequence.
+
+When a track is given `notes` it will modulate the pitch of the sample based on the _root note_, which by default is `69` (Middle A).
+
+We'll cover all of this in more detail in the next few sections!
+
+## Modulating Samples
+
+### How do I change the playback speed of a sample?
+
+We can change the playback rate using `speed`, which takes a number where 1 is "normal speed," `0.5` is "half speed", etc.
+
+```javascript
+var t = new track(mySample)
+// play at half speed
+t.beat(4).nl(4).speed(0.5)
+```
+
+Alternatively we can use `stretch`, which changes the playback rate so that it fits across the specified number of 1/16th notes.
+
+```javascript
+var t = new track(mySample)
+// stretch the sample to play across sixteen 1/16th notes
+t.beat(16).nl(16).stretch(16)
+```
+
+Due to the lack of a time-independent pitch shifting algorithm in the Web Audio API it is currently not possible to do pitch shifting that doesn't also change the playback time. There are pitch-shifting implementations out there, but no experiments have been done with them as of the time of this writing. [Pull requests](https://github.com/kylestetz/lissajous/pulls) are always welcome!
+
+### How do I play a sample using a sequence of MIDI notes?
+
+`notes` will shift the playback rate of the active sample based on its root note. The root note is `69` by default and can be changed using `root`.
+
+```javascript
+// using a sample recorded at Middle A (69)
+var t = new track(mySample)
+t.beat(4).nl(4).notes(64,66,68,69)
+
+// using a sample recorded at Middle C (64)
+var t2 = new track(mySample2)
+t2.beat(4).nl(4).root(64).notes(64,66,68,69)
+```
+
+When a track has notes it will ignore both the `speed` and `stretch` settings. To remove an active notes sequence you can call `notes()` with no arguments.
+
+## Slicing and Dicing Samples
+
+### How do I change the sample starting and ending points?
+
+Samples can be `clamp`ed to specific points. In popular audio software you'll often see clamps expressed in _samples_, where the beginning might be 11025 and the end 22050. This is confusing, so the `clamp` API instead accepts numbers from 0 to 1 representing a position within the sample. 0 = the beginning, 1 = the end.
+
+Here we load our sample and play the portion of it from 25% to 50%:
+
+```javascript
+var t = new track(mySample)
+t.beat(2).nl(2).clamp(0.25, 0.5)
+```
+
+Notice that `beat` and `nl` were set independent of the `clamp`. This means that the portion of the sample from 0.25 to 0.5 might be _shorter_ or _longer_ than two 1/16th notes— it's up to you to keep track of this.
+
+So what happens if that portion of the sample is shorter than two 1/16th notes? It will stop playing the sample when it reaches the end unless it is set to loop. By calling `loop(1)` we can tell this small piece of the sample to loop endlessly _for the duration of the note_.
+
+```javascript
+var t = new track(mySample)
+t.beat(2).nl(2).clamp(0.25, 0.5).loop(1)
+```
+
+When calling `clamp` with a single argument, e.g. `clamp(0.25)`, it sets the start to `0` and uses the number provided as the end point.
+
+Now we have clamp points, but what if we want to shift the clamp points over time?
+
+`cs`, also aliased as `clshift`, allows us to add or subtract from the clamp start and end positions each time a note is triggered. The principal is simple: the number passed into `cs` will be added to the clamp positions each note.
+
+```javascript
+var t = new track(mySample)
+t.beat(2).nl(2).clamp(0,.125).cs(.125)
+
+// (start, end): (0, .125) -> (.125, .25) -> (.25, .375) ...
+```
+
+**Clamp shifting can be used as an alternative method of playing a long sample from start to finish.** One of the drawbacks of using `play` / setting a long `beat` and `nl` is that your parameter changes won't update until the next time a note is triggered. If instead the `beat` and `nl` are kept short and corresponding `clamp` and `cs` values match up so that it sounds like the sample is playing from start to finish, you have more opportunities to modulate parameters (using generators, perhaps).
+
+_**Pro tip:** since `clamp` and `cs` accept fractions, we can use division operations instead of decimal points. For example, calling `clamp(1/16).cs(1/16)` sets the clamp to the first 1/16th of the sample and shifts it that amount every note. This is easier to grasp conceptually, especially in the middle of a performance!_
+
+### Can I use granular synthesis techniques?
+
+The clamp shifting technique lends itself well to granular synthesis concepts. We could, for example, play each 1/16th of a sample in _backwards order_ by passing a negative value into `cs`:
+
+```javascript
+var t = new track(mySample)
+t.beat(1).clamp(1/16).cs(-1/16)
+```
+
+Setting a tiny `clamp` and a tinier `cs` for a long sample in conjunction with `beat32(1)` gets us quick-and-dirty pitch shifting. Setting `loop(1)` ensures that we won't have gaps of silence, but it can potentially cause a lot of clipping noise.
+
+```javascript
+var t = new track(mySample)
+t.beat32(1).nl32(1).clamp(1/128).cs(1/256).loop(1)
+```
+
+Using generators like `rf` or `bounce` we can create a more chaotic shifting rule that results in slightly unpredictable behavior:
+
+```javascript
+var t = new track(mySample)
+t.beat32(1).nl32(1).clamp(1/32).cs( rf(-1/32, 1/32) )
+```
