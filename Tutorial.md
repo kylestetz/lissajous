@@ -320,12 +320,58 @@ Functions that work well with `rf`: `vol`, `nl` and `nl32`, `pan`, `adsr` and `a
 
 ### Random Numbers With Some Constraints
 
-##### `choice([])`
 ##### `walk.<scale>(rootNote [, numOfOctaves])`
+
+`walk` is an object containing 86 different functions representing scales. Check out the [API Docs](https://github.com/kylestetz/lissajous/blob/master/API.md#walkchordrootnote--numberofoctaves) for a complete list of available scales.
+
+`walk`, as you might expect, is tailored to the `notes` function and doesn't have much use elsewhere. 
+
+```javascript
+var t = new track()
+// random notes along the major scale in Middle C
+t.beat(4).notes( walk.major(64) )
+// random notes along the minor scale across 3 octaves starting at Middle A
+t.notes( walk.minor(69, 3) )
+```
+
+##### `choice([])`  
+
+
+
 
 ### Controlled Movement
 
+These are perhaps the most powerful generators. If you're confused about the lack of proper LFOs in Lissajous, fear not: `step` and `bounce` are Lissajous' version of oscillator-based control!
+
 ##### `step(start, end, iterations [, repeat])`
+
+`step` is for interpolating between two values over a specific number of calls. Think of it as a saw-shaped LFO that only changes its value when a note is hit. 
+
+For example, if we want to shift between 1 and 2 over the course of 5 steps, and then hang out at 2 forever:
+
+```
+// step(1,2,5)
+1 -> 1.25 -> 1.5 -> 1.75 -> 2 -> 2 -> 2 -> 2 ...
+```
+
+Pass `true` or `1` for the `repeat` flag and it will repeat these steps endlessly:
+
+```
+// step(1,2,5,true)
+1 -> 1.25 -> 1.5 -> 1.75 -> 2 -> 1 -> 1.25 -> 1.5 ...
+```
+
+Some great practical applications of `step` _without_ `repeat` include panning from left to right and fading the volume out. Stepping with `repeat` is great for shuffling through oscillator types using `type` or through samples using `sseq` (documented below).
+
 ##### `bounce(start, end, iterations)`
+
+`bounce` interpolates between values just like step does but reverses direction when it reaches the end, "bouncing" endlessly between the `start` and `end` values. Think of it as a triangle-shaped LFO that only changes its value when a note is hit.
+
+```
+// bounce(1,2,5)
+1 -> 1.25 -> 1.5 -> 1.75 -> 2 -> 1.75 -> 1.5 -> 1.25 -> 1 ...
+```
+
+`bounce` works well with anything that takes a floating point number: `vol`, `nl`, `nl32`, `pan`, `adsr`, `adsr32`, `clamp`, `cs`, `speed`, `fres`, `famt`, `dtime`, `dfb`, and `dlevel`.
 
 ----------
