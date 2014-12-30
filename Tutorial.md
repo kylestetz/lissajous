@@ -50,8 +50,17 @@ _If you are a veteran of Javascript, note that the term *generator* does not ref
 [**Resampling with `render`**](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#resampling-with-render)
 - [How do I resample audio from a track?](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#how-do-i-resample-audio-from-a-track)
 
-**Part 4: Groups and Scheduling**
+**Part 4: Scheduling and Grouping and Group Scheduling**
 
+[**Scheduling with `in`**]()
+- [Can I schedule functions to be called later?]()
+- [Can I schedule multiple concurrent timelines?]()
+- [Are there any caveats to be aware of when using `in`?]()
+
+[**Groups**]()
+- [Can I call the same function on more than one track at once?]()
+- [How do I add or remove tracks from an existing group?]()
+- [Can I use `in` on groups?]()
 
 ## Rhythm with Oscillators
 
@@ -164,7 +173,7 @@ Notes are expressed in [**MIDI notation**](http://www.electronics.dit.ie/staff/t
 
 If a track hasn't been given any notes it will play `64` (Middle C).
 
-_Pro tip: in the Chrome and Firefox consoles you can hit the Up Arrow to move through the history of commands you've run. If you are creating a melody but one of your notes is wrong use this feature to pull it up and modify it so you don't have to rewrite the whole line!_
+_**Pro tip:** in the Chrome and Firefox consoles you can hit the Up Arrow to move through the history of commands you've run. If you are creating a melody but one of your notes is wrong use this feature to pull it up and modify it so you don't have to rewrite the whole line!_
 
 ### What tools are available to work with notes?
 
@@ -558,7 +567,7 @@ Tracks can hold multiple samples. Only one can be triggered for any given note.
 ```javascript
 var t = new track(mySample1, mySample2, mySample3)
 // or
-t = new track()
+var t = new track()
 t.sample(mySample1, mySample2, mySample3)
 // or
 var t = new track(mySample1)
@@ -605,7 +614,7 @@ The `render` and `render32` functions record the audio output from the track for
 The `render` function accepts a length of time to record for. If no argument is present it will record for the duration of the `beat` pattern (e.g. if the `beat` is `(4,2,2)` it will record for 4+2+2=8 1/16th notes).
 
 ```javascript
-t = new track()
+var t = new track()
 t.beat(2).nl(2).notes( walk.major(52))
 t.render(16)
 // console.log: 'started'.
@@ -615,3 +624,120 @@ t.render(16)
 All effects will be turned off when the recording is finished.
 
 Note that if you run render on a track with multiple samples **they will be removed** and only the new sample will be present on the track.
+
+## Scheduling with `in`
+
+At this point we've covered most of the capabilities of a track. Putting this all into practice in a performance, however, there may come a point where you are juggling too many tracks at the same time. Staging compositional changes in your song can involve a lot of code firing simultaneously. Luckily we've got a few tools at our disposal...
+
+### Can I schedule functions to be called later?
+
+Yes! Tracks have a special function `in` that allows them to defer calls until a point in the future. `in` takes a multiple of 1/16th notes after which point you can call the track's API normally. Any calls after `in` will be deferred until it is done waiting.
+
+```javascript
+var t = new track()
+// play a beat with Middle C now.
+// in 8/16ths play Middle A.
+t.beat(2).notes(64).in(8).notes(69)
+```
+
+Calls to `in` are _cumulative_. Think of it as a timeline: `in(8)` will wait 8/16ths, but another call to `in(8)` in the same chain of functions will wait another 8/16ths _after that_. In this way you can build long timelines (entire songs even!) with a single chain.
+
+In the following example we establish a track with a beat and modify it over the course of 72 1/16th notes.
+
+```javascript
+var t = new track()
+t.beat(2).notes(walk.major(64)).adsr(0,2,0,0)
+  .in(16).beat(4).adsr(0,4,0,0)
+  .in(16).beat(2).adsr(0,2,0,0)
+  .in(16).beat(1).adsr(0,1,0,0).vol(0.5)
+  .in(8).vol(0.25)
+  .in(8).vol(0.1)
+  .in(8).beat()
+```
+
+### Can I schedule multiple concurrent timelines?
+
+Here's an example of scheduling a slew of function calls to run in the future:
+
+```javascript
+var t = new track()
+t.in(8).beat(2)
+t.in(16).nl(3)
+t.in(16).notes(64)
+t.in(32).vol(0.5)
+```
+
+Calls to `in` have one special convenience built into them: if you are building a long cumulative timeline and you want to _break out of it_ within a single function chain, you can use the `_` property.
+
+The easiest way to visualize this is using the `track.log` function, which `console.log`s whatever is passed into it.
+
+```javascript
+var t = new track()
+t.log('I am running now.')
+  .in(8).log('I am running in the future.')._.log('I am also running now.')
+  
+// output:
+// > 'I am running now.'
+// > 'I am also running now.'
+// (in 8/16ths...)
+// > 'I am running in the future.'
+```
+
+### Are there any caveats to be aware of when using `in`?
+
+The premise of `in` is that it takes all the functions you want to call, waits for the right time, and then tries to call them all. If in the meantime you've changed some important parameters of the track, there's a potential for some of the function calls to fail or behave unexpectedly.
+
+You cannot cancel deferred calls once they have been scheduled.
+
+## Groups
+
+### Can I call the same function on more than one track at once?
+
+Yes! Apart from `track` there is another object at your disposal: `group`.
+
+```javascript
+var t1 = new track()
+var t2 = new track()
+t1.beat(2).nl(2).notes(walk.major(52)).pan(-1)
+t2.beat(4).nl(4).notes(walk.major(64)).pan(1)
+
+// create a group with t1 and t2
+var g = new group(t1, t2)
+g.adsr(1,0,1,1).vol(0.5)
+```
+
+`group` takes a list of tracks and exposes the entire track API to us— all of the same functions are available and they are called on all tracks within the group at the same time.
+
+In the example above we have access to the group `g` as well as `t1` and `t2` separately.
+
+### How do I add or remove tracks from an existing group?
+
+`group.add` and `group.remove` accept one or more tracks.
+
+_**Pro tip:** These can be used within a chain of functions to temporarily modify the number of tracks you are operating on!_
+
+Continuing the example above:
+
+```javascript
+// ^^ continued from example above ^^
+
+var t3 = new track()
+// add `t3` to the group `g`
+g.add(t3)
+
+// run a chain of commands, temporarily removing t3 and then adding it back
+g.beat(2).nl(2).notes(walk.major(64)).remove(t3).adsr(0,2,0,0).add(t3).vol(1)
+```
+
+### Can I use `in` on groups?
+
+`in` is available for groups and works the same way it does for tracks!
+
+```javascript
+var t1 = new track()
+var t2 = new track()
+var g = new group(t1,t2)
+
+t1.pan(-1), t2.pan(1)
+g.beat(2).notes(walk.major(64)).in(32).notes(walk.major(52))
+```
