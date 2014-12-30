@@ -56,8 +56,8 @@ track.prototype._render = function(renderLength, resolution) {
 
         self.sample(bufferSource);
 
-
         // probably reset effects here?
+        self._emit('reset');
       });
 
       self._recordInstance = null;

@@ -1,5 +1,3 @@
-// Recorder.js by @mattdiamond :: https://github.com/mattdiamond/Recorderjs
-
 var recLength = 0,
   recBuffersL = [],
   recBuffersR = [],
@@ -102,8 +100,8 @@ function encodeWAV(samples){
 
   /* RIFF identifier */
   writeString(view, 0, 'RIFF');
-  /* file length */
-  view.setUint32(4, 32 + samples.length * 2, true);
+  /* RIFF chunk length */
+  view.setUint32(4, 36 + samples.length * 2, true);
   /* RIFF type */
   writeString(view, 8, 'WAVE');
   /* format chunk identifier */

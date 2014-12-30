@@ -47,6 +47,7 @@ _If you are a veteran of Javascript, note that the term *generator* does not ref
 - [How do I change the sample starting and ending points?](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#how-do-i-change-the-sample-starting-and-ending-points)
 - [Can I use granular synthesis techniques?](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#can-i-use-granular-synthesis-techniques)
 
+**Part 4: Groups and Scheduling**
 
 
 ## Rhythm with Oscillators
@@ -439,7 +440,7 @@ t.play()
 
 ### What is the relationship between notes and samples?
 
-Tracks using samples can still take advantage of `beat`, `nl`, and `adsr` independent of what's going on with the sample. By default every note will trigger using the beginning of the sample, but we have control over the sample position using `clamp` and `cs`, which we'll cover next.
+Tracks using samples can still take advantage of `beat`, `nl`, and `adsr` independent of what's going on with the sample. By default every note will trigger using the beginning of the sample, but we have control over the sample position using `clamp` and `cs`.
 
 Sample speed can be controlled directly using `speed`, or indirectly using `stretch` or a `notes` sequence.
 
@@ -546,3 +547,46 @@ Using generators like `rf` or `bounce` we can create a more chaotic shifting rul
 var t = new track(mySample)
 t.beat32(1).nl32(1).clamp(1/32).cs( rf(-1/32, 1/32) )
 ```
+
+## Using multiple samples in the same track
+
+Tracks can hold multiple samples. Only one can be triggered for any given note.
+
+```javascript
+var t = new track(mySample1, mySample2, mySample3)
+// or
+t = new track()
+t.sample(mySample1, mySample2, mySample3)
+// or
+var t = new track(mySample1)
+t.addsamples(mySample2, mySample3)
+```
+
+Some practical applications for using multiple samples include: using different drum sounds comprising a drum kit, using multiple sounds to represent notes, and playing back small parts of a larger sample in a different order.
+
+### How do I determine which sample should play for a given note?
+
+Much like the `type` function, `sseq` (which stands for "sample sequence") controls which sample to trigger for a given note. `sseq` takes integers from `0` to `# of samples - 1` representing the indices of the samples in the order you added them.
+
+```javascript
+var t = new track(mySample1, mySample2, mySample3)
+t.beat(4).nl(4).sseq(0,1,2)
+```
+
+### How does the sample API work if I have more than one on a track?
+
+Only one sample can be edited at a time— we call this the _active_ sample.
+
+`select` takes an integer representing the index of the sample you wish to edit. When multiple samples are present you'll have to `select` a different one if you wish to use `clamp`, `cs`, `loop`, `play`, etc. with it.
+
+`select` can be chained so that multiple samples can be manipulated in a single line of code.
+
+```javascript
+var t = new track(mySample1, mySample2, mySample3)
+t.beat(2).nl(2).sseq(0,1,2)
+  .select(0).clamp(1/4).cs(1/4)
+  .select(1).clamp(1/8).cs(1/8)
+  .select(2).clamp(1/16).cs(1/16)
+```
+
+The selection will stay where it was last put (or, if it hasn't been called at all, sample `0` will be the active sample) so it is only necessary to call it when switching the active sample.
