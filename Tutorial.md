@@ -590,3 +590,23 @@ t.beat(2).nl(2).sseq(0,1,2)
 ```
 
 The selection will stay where it was last put (or, if it hasn't been called at all, sample `0` will be the active sample) so it is only necessary to call it when switching the active sample.
+
+## Resampling with `render`
+
+A note before we start down this road: `render` is very finnicky! It works 90% of the time, but expect that once in a while it never stops recording. It's a gamble, but one you should be willing to take once you realize the potential of the tool. Also expect imperfect timing of recordings, big clipping sounds, and general weirdness.
+
+### How do I resample audio from a track?
+
+The `render` and `render32` functions record the audio output from the track for a length of time and, once the recording is finished, add the recorded sound as a sample to the track and change the `beat` and `nl` so that they are the length of the sample. Any `clamp` or `cs` values will be reset.
+
+The `render` function accepts a length of time to record for. If no argument is present it will record for the duration of the `beat` pattern (e.g. if the `beat` is `(4,2,2)` it will record for 4+2+2=8 1/16th notes).
+
+```javascript
+t = new track()
+t.beat(2).nl(2).notes( walk.major(52))
+t.render(16)
+```
+
+All effects will be turned off when the recording is finished.
+
+Note that if you run render on a track with multiple samples **they will be removed** and only the new sample will be present on the track.
