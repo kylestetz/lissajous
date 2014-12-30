@@ -47,6 +47,9 @@ _If you are a veteran of Javascript, note that the term *generator* does not ref
 - [How do I change the sample starting and ending points?](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#how-do-i-change-the-sample-starting-and-ending-points)
 - [Can I use granular synthesis techniques?](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#can-i-use-granular-synthesis-techniques)
 
+[**Resampling with `render`**](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#resampling-with-render)
+- [How do I resample audio from a track?](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#how-do-i-resample-audio-from-a-track)
+
 **Part 4: Groups and Scheduling**
 
 
@@ -605,6 +608,8 @@ The `render` function accepts a length of time to record for. If no argument is 
 t = new track()
 t.beat(2).nl(2).notes( walk.major(52))
 t.render(16)
+// console.log: 'started'.
+// console.log: 'stopped'.
 ```
 
 All effects will be turned off when the recording is finished.
