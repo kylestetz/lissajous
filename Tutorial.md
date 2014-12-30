@@ -52,15 +52,15 @@ _If you are a veteran of Javascript, note that the term *generator* does not ref
 
 **Part 4: Scheduling and Grouping and Group Scheduling**
 
-[**Scheduling with `in`**]()
-- [Can I schedule functions to be called later?]()
-- [Can I schedule multiple concurrent timelines?]()
-- [Are there any caveats to be aware of when using `in`?]()
+[**Scheduling with `in`**](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#scheduling-with-in)
+- [Can I schedule functions to be called later?](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#can-i-schedule-functions-to-be-called-later)
+- [Can I schedule multiple concurrent timelines?](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#can-i-schedule-multiple-concurrent-timelines)
+- [Are there any caveats to be aware of when using `in`?](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#are-there-any-caveats-to-be-aware-of-when-using-in)
 
-[**Groups**]()
-- [Can I call the same function on more than one track at once?]()
-- [How do I add or remove tracks from an existing group?]()
-- [Can I use `in` on groups?]()
+[**Groups**](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#groups)
+- [Can I call the same function on more than one track at once?](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#can-i-call-the-same-function-on-more-than-one-track-at-once)
+- [How do I add or remove tracks from an existing group?](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#how-do-i-add-or-remove-tracks-from-an-existing-group)
+- [Can I use `in` on groups?](https://github.com/kylestetz/lissajous/blob/master/Tutorial.md#how-do-i-add-or-remove-tracks-from-an-existing-group)
 
 ## Rhythm with Oscillators
 
