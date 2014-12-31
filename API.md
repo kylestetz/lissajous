@@ -135,7 +135,7 @@ Same as `track.nl`, but expressed in 1/32nd note steps.
 
 ### `track.trans(amount)`
 - `amount`: steps
-Translate the sequence of notes by a given amount expressed in MIDI numbers.
+Translate the sequence of notes by a given amount expressed in MIDI numbers. `trans` will also translate the output of generator functions!
 
 ```javascript
 var t = new track()

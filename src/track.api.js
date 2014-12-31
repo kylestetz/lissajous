@@ -97,6 +97,12 @@ track.prototype.trans = function(semitones) {
   for(var i = 0; i < self._notesSequencer.pattern.length; i++) {
     if(typeof self._notesSequencer.pattern[i] !== 'function') {
       self._notesSequencer.pattern[i] = self._notesSequencer.pattern[i] + semitones;
+    } else {
+      // if it's a function, decorate it in a new function that translates it.
+      var originalCb = self._notesSequencer.pattern[i];
+      self._notesSequencer.pattern[i] = function() {
+        return originalCb() + semitones;
+      };
     }
   }
   return self;
