@@ -1,18 +1,6 @@
 @font-face {
-    font-family: 'lektonbold';
-    src: url('lekton-bold-webfont.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'lektonitalic';
-    src: url('lekton-italic-webfont.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'lektonregular';
-    src: url('lekton-regular-webfont.ttf') format('truetype');
+    font-family: 'FiraMono';
+    src: url('firamono-regular-webfont.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -24,9 +12,9 @@
 
 body
 {
-  font-family: 'lektonregular', Menlo, 'Courier New', monospace;
-  font-size: 20px;
-  letter-spacing: 1px;
+  font-family: 'FiraMono', Menlo, 'Courier New', monospace;
+  font-size: 18px;
+  line-height: 1.5em;
   background-color: #ebebe5;
   margin: 0;
   padding: 0;
@@ -35,18 +23,19 @@ body
 a
 {
   color: #4e8996;
-  transition: opacity 0.15s;
   text-decoration: none;
 }
 
 a:hover
 {
-  opacity: 0.6;
+  color: #335a62;
+  text-decoration: underline;
 }
 
 p
 {
   text-align: center;
+  color: #616161;
 }
 
 .bar
