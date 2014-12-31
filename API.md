@@ -481,14 +481,14 @@ t.dlevel(0.5, 0.4, 0.3, 0.2)
 ### `track.chorus(rate [, feedback, delay])`
 The chorus effect from [Tuna.js](https://github.com/Dinahmoe/tuna).
 
-- `rate`: frequency in Hz
+- `rate`: multiple of 1/16th notes (same as `beat`)
 - `feedback`: 0 - 1
 - `delay`: 1/16th note steps
 
 ### `track.tremolo(rate [, intensity, stereoPhase])`
 The tremolo effect from [Tuna.js](https://github.com/Dinahmoe/tuna).
 
-- `rate`: frequency in Hz
+- `rate`: multiple of 1/16th notes (same as `beat`)
 - `intensity`: 0 - 1
 - `stereoPhase`: 0 - 180
 
