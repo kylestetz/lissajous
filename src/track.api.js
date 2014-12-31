@@ -281,14 +281,15 @@ track.prototype.sample = function() {
 
 track.prototype.play = function(overflow) {
   var self = this;
-  if(self._currentSample) {
+  if(self._editingSample) {
     // reset the current sample
-    self._currentSample.defaultParams();
+    self._editingSample.defaultParams();
     // reset the beat, note length, adsr
-    var beatLength = self._currentSample.getBeatLength(overflow);
+    var beatLength = self._editingSample.getBeatLength(overflow);
     self.beat32(beatLength);
     self.nl(beatLength);
     self.adsr();
+    self.sseq( self._samples.indexOf(self._editingSample) );
   }
   return self;
 };
