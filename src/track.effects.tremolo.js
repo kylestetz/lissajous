@@ -9,7 +9,7 @@ track.prototype.tremolo = function(rate, intensity, stphase) {
     if(self._tremoloEffectIndex == null) {
 
       self._tremolo = new tuna.Tremolo({
-        rate: clock.noteLengthToHz(rate * 2) || 1,
+        rate: clock.noteLengthToHz(rate, 16) || 1,
         intensity: intensity || 0.5,    //0 to 1
         stereoPhase: stphase || 0,    //0 to 180
         bypass: 0
@@ -22,7 +22,7 @@ track.prototype.tremolo = function(rate, intensity, stphase) {
         self.tremolo();
       });
     } else {
-      self._tremolo.rate = clock.noteLengthToHz(rate * 2) || 1;
+      self._tremolo.rate = clock.noteLengthToHz(rate, 16) || 1;
       self._tremolo.intensity = intensity || 0.5;
       self._tremolo.stereoPhase = stphase || 0;
     }

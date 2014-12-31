@@ -53,11 +53,11 @@ function TimeSingleton(){
     return ( 60.0 / self.tempo ) / (self.bpmResolution / 4);
   }
 
-  self.noteLengthToHz = function(sixteenths) {
-    if(!sixteenths) {
+  self.noteLengthToHz = function(interval, modifier) {
+    if(!interval) {
       return 0;
     }
-    return 1 / (self.noteLength() * sixteenths);
+    return 1 / (self.noteLength() * interval * (self.bpmResolution / modifier));
   }
 
   self.addTrack = function(track) {
