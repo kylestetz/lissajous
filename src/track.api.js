@@ -130,18 +130,13 @@ track.prototype.pan = function() {
 
 // ------------------------------------------------------------------ OSCILLATORS
 
-var SINE = "sine";
-var SQUARE = "square";
-var SAWTOOTH = "sawtooth";
-var TRIANGLE = "triangle";
-
 track.prototype.sine = function() {
   var self = this;
   if(self._oscTypeSequencer.pattern.length) {
     // clear the oscType sequencer if it had a pattern
     self._oscTypeSequencer.set([]);
   }
-  self._oscType = SINE;
+  self._oscType = "sine";
   return self;
 };
 
@@ -151,7 +146,7 @@ track.prototype.square = function() {
     // clear the oscType sequencer if it had a pattern
     self._oscTypeSequencer.set([]);
   }
-  self._oscType = SQUARE;
+  self._oscType = "square";
   return self;
 };
 
@@ -161,7 +156,7 @@ track.prototype.saw = function() {
     // clear the oscType sequencer if it had a pattern
     self._oscTypeSequencer.set([]);
   }
-  self._oscType = SAWTOOTH;
+  self._oscType = "sawtooth";
   return self;
 };
 
@@ -171,7 +166,7 @@ track.prototype.tri = function() {
     // clear the oscType sequencer if it had a pattern
     self._oscTypeSequencer.set([]);
   }
-  self._oscType = TRIANGLE;
+  self._oscType = "triangle";
   return self;
 };
 
@@ -181,7 +176,7 @@ track.prototype.type = function() {
   var arguments = _parseArguments(arguments);
   self._oscTypeSequencer.set(arguments);
   if(arguments.length == 0) {
-    self._oscType = SINE;
+    self._oscType = "sine";
   }
   return self;
 };
