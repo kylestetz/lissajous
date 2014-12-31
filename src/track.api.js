@@ -335,7 +335,7 @@ track.prototype.clamp = function(start, end) {
   if(self._editingSample) {
     if(end == null) {
       self._editingSample.loopStart = (0);
-      self._editingSample.loopEnd = (start);
+      self._editingSample.loopEnd = (start || 1);
     } else {
       self._editingSample.loopStart = (start || 0);
       self._editingSample.loopEnd = (end || 1);
