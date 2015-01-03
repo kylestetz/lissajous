@@ -586,7 +586,7 @@ t.notes( walk.minor(69, 3) )
 
 ### `choice([])`
 
-Choose a random item from a list.
+Choose a random item from a list. Accepts lists of values or arrays (or both) as arguments.
 
 ```javascript
 var t = new track()

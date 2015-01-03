@@ -68,8 +68,10 @@ function bounce(start, end, iterations) {
 }
 
 // choose an array item randomly
-function choice(items) {
-  if(!items || items.length < 1) return function() { return 0; };
+function choice() {
+  if(!arguments.length) return function() { return 0; };
+
+  var items = _parseArguments(arguments);
 
   return function() {
     return items[ Math.floor( Math.random() * items.length ) ];
