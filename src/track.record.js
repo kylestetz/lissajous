@@ -44,6 +44,7 @@ track.prototype._render = function(renderLength, resolution) {
       }
       self.nl(self._beatPattern.getLength());
       self.sseq();
+      self.adsr();
 
 
       // get that buffer
