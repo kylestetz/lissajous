@@ -94,6 +94,10 @@ track.prototype.nl32 = function() {
 
 track.prototype.trans = function(semitones) {
   var self = this;
+  // if there were no notes, set them to the default ([64])
+  if(!self._notesSequencer.pattern.length) {
+    self._notesSequencer.set([64]);
+  }
   for(var i = 0; i < self._notesSequencer.pattern.length; i++) {
     if(typeof self._notesSequencer.pattern[i] !== 'function') {
       self._notesSequencer.pattern[i] = self._notesSequencer.pattern[i] + semitones;
@@ -105,6 +109,7 @@ track.prototype.trans = function(semitones) {
       };
     }
   }
+
   return self;
 };
 

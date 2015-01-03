@@ -137,6 +137,8 @@ Same as `track.nl`, but expressed in 1/32nd note steps.
 - `amount`: steps
 Translate the sequence of notes by a given amount expressed in MIDI numbers. `trans` will also translate the output of generator functions!
 
+A track with no note sequence will default to MIDI note `64` (Middle C). If `trans` is called on a track in this state, the note sequence will be set explicitly to `64` and then translated normally.
+
 ```javascript
 var t = new track()
 t.beat(2).notes(64, 68)
