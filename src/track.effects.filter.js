@@ -1,7 +1,12 @@
 // we can use this for any type of filter
 track.prototype._applyFilter = function(freq, res, amt, type) {
   var self = this;
-  if(!freq && !res && !amt) {
+  if(!arguments.length) {
+    self._filterIsActive = false;
+    self._filterFrequencySequencer.set([]);
+    self._filterResSequencer.set([]);
+    self._filterEnvAmtSequencer.set([]);
+  } else if(!freq && !res && !amt) {
     // if the filter is on but another kind was called,
     // switch it. Is this the right behavior? dunno.
     if(self._filterIsActive && self._filterType !== type) {
@@ -19,6 +24,17 @@ track.prototype._applyFilter = function(freq, res, amt, type) {
   self._filterFrequencySequencer.set([freq]);
   self._filterResSequencer.set([res]);
   self._filterEnvAmtSequencer.set([amt]);
+
+  if(self._filterEffectEventId) {
+    self._off('reset', self._filterEffectEventId);
+  }
+
+  self._filterEffectEventId = generateId();
+  self._once('reset', self._filterEffectEventId, function() {
+    // shut off the filter regardless of type
+    self._applyFilter();
+  });
+
 }
 
 // =============================================================
