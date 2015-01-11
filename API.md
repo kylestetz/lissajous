@@ -19,6 +19,7 @@
 - [`track.type(types)`](https://github.com/kylestetz/lissajous/blob/master/API.md#tracktypetypes-sequencer)
 - [`track.adsr(attack, decay, sustain, release)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackadsrattack-decay-sustain-release-sequencer)
 - [`track.adsr32(attack, decay, sustain, release)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackadsr32attack-decay-sustain-release-sequencer)
+- [`track.destroy()`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackdestroy)
 
 Samples
 - [`track.sample(samples)`](https://github.com/kylestetz/lissajous/blob/master/API.md#tracksamplesamples)
@@ -197,6 +198,19 @@ t.adsr([0,0,1,0], [1,1,0.5,0.1]) // alternate between two envelopes
 
 ### `track.adsr32(attack, decay, sustain, release)` `(sequencer)`
 Same as `track.adsr`, but `attack`, `decay`, and `sustain` are specified in 1/32nd notes.
+
+### `track.destroy()`
+Removes the track from the clock, effectively shutting it off and allowing it to be safely deleted. This method also removes the track from any `group` objects that were referencing it.
+
+```javascript
+var t = new track()
+t.beat(4)
+// ...
+t.destroy()
+delete t
+```
+
+It's worth noting that if `destroy` is called on a track but the track is never deleted, it can be added back to the clock by calling `clock.addTrack(track)`.
 
 ## Working with Samples
 
