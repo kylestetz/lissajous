@@ -27,6 +27,14 @@ function _parseArguments(args) {
   return flattened;
 }
 
+// ------------------------------------------------------------------ BASICS
+
+track.prototype.destroy = function() {
+  var self = this;
+  self._destroy();
+  return self;
+};
+
 track.prototype.beat = function() {
   var self = this;
   var arguments = _parseArguments(arguments);

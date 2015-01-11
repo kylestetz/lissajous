@@ -278,6 +278,16 @@ function track() {
     };
   });
 
+  // ---------------------------------------------------            -   DESTROY   -
+  // ---------------------------------------------------            ---------------
+
+  self._destroy = function() {
+    // tell `clock` to remove this track
+    // from all bookkeeping.
+    clock._destroyTrack(self);
+    clock._removeTrackFromGroups(self);
+  };
+
   // ---------------------------------------------------            - SOUND CHAIN -
   // ---------------------------------------------------            ---------------
 
@@ -322,6 +332,16 @@ track.prototype._detachSequencers = function() {
 
 track.prototype._addScheduler = function(newScheduler) {
   this._schedulers.push(newScheduler);
+}
+
+track.prototype._detachSchedulers = function() {
+  for(var i = 0; i < arguments.length; i++) {
+    var index = this._schedulers.indexOf(arguments[i]);
+    if(index > -1) {
+      this._schedulers.splice(index, 1);
+      continue;
+    }
+  }
 }
 
 track.prototype._addSequencer = function(newSequencer) {

@@ -22,8 +22,8 @@ function group() {
   });
   self._inScheduler.set([1], 16);
   self._schedulers.push(self._inScheduler);
-  // ahhhh! spoooooky
-  clock.addTrack(self);
+
+  clock.addGroup(self);
 
 
   // add one or more tracks to the group after it has been instantiated
