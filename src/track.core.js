@@ -304,6 +304,12 @@ function track() {
     }
   };
 
+  self._removeState = function(fn) {
+    if(self._state[fn]) {
+      delete self._state[fn];
+    }
+  };
+
   self._setStateProperty = function(prop, value) {
     var self = this;
     self._stateProps[prop] = value;
