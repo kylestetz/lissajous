@@ -2,38 +2,19 @@ track.prototype.reverb = function(sec, decay, wet, dry) {
   var self = this;
   if(arguments.length == 0) {
     if(self._reverbEffectIndex !== null) {
-      // TODO: Do we need to delete our impulse buffer, will it create a memory leak?
-
       // remove any events associated with this instance of the effect
       self._off('reset', self._reverbEffectIndex);
       // remove the effect from the chain
       self._reverbEffectIndex = self._removeFromChain(self._reverbEffectIndex);
-      // detach all sequencers
-      // self._detachSequencers( self._delayDtimeSequencer, self._delayFbSequencer, self._delayLevelSequencer );
+
+      self._setState('reverb', []);
     }
   } else {
     if(self._reverbEffectIndex == null) {
       self._reverb = new ReverbEffect(sec, decay, wet, dry);
 
-      /* TODO: Add sequencers for wet/dry, and possibly time/decay if it doesn't tax the CPU 
+      /* TODO: Add sequencers for wet/dry, and possibly time/decay if it doesn't tax the CPU
        * too much to regenerate the impulse. Similar to how delay effect does */
-       
-      // // make a sequencer for changing the delay time
-      // self._delayDtimeSequencer = new Sequencer( function(value) {
-      //   self._delay.delay.delayTime.value = value * (clock.bpmResolution / 16) * clock.noteLength();
-      // });
-
-      // // make a sequencer for changing the feedback time
-      // self._delayFbSequencer = new Sequencer( function(value) {
-      //   self._delay.feedback.gain.value = value;
-      // });
-
-      // // make a sequencer for changing the wet level
-      // self._delayLevelSequencer = new Sequencer( function(value) {
-      //   self._delay.wetLevel.gain.value = value;
-      // });
-
-      // self._attachSequencers( self._delayDtimeSequencer, self._delayFbSequencer, self._delayLevelSequencer );
 
       self._reverbEffectIndex = self._addToChain(self._reverb.input, self._reverb.output);
 
@@ -45,10 +26,9 @@ track.prototype.reverb = function(sec, decay, wet, dry) {
       self._reverb.reverb.buffer = _buildImpulse(sec, decay);
       self._reverb.wetLevel.gain.value = wet;
       self._reverb.dryLevel.gain.value = dry;
-      // self._delayDtimeSequencer.set(dtime);
-      // self._delayFbSequencer.set(fb || 0.25);
-      // self._delayLevelSequencer.set(level || 0.5);
     }
+
+    self._setState('reverb', [sec, decay, wet, dry]);
   }
   return self;
 }

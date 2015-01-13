@@ -6,6 +6,7 @@ track.prototype.chorus = function(rate, fb, delay) {
       // remove the `reset` handler
       self._off('reset', self._chorusEffectIndex);
       self._chorusEffectIndex = self._removeFromChain(self._chorusEffectIndex);
+      self._setState('chorus', []);
     }
   } else {
     if(self._chorusEffectIndex == null) {
@@ -29,6 +30,7 @@ track.prototype.chorus = function(rate, fb, delay) {
       self._chorus.feedback = fb || 0.2;
       self._chorus.delay = delay * clock.noteLength() * (clock.bpmResolution / 16) || 0.0;
     }
+    self._setState('chorus', [self._chorus.rate, self._chorus.feedback, self._chorus.delay]);
   }
 
   return self;

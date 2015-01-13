@@ -5,6 +5,7 @@ track.prototype.tremolo = function(rate, intensity, stphase) {
     // remove any events associated with this instance of the effect
     self._off('reset', self._tremoloEffectIndex);
     self._tremoloEffectIndex = self._removeFromChain(self._tremoloEffectIndex);
+    self._setState('tremolo', []);
   } else {
     if(self._tremoloEffectIndex == null) {
 
@@ -26,6 +27,8 @@ track.prototype.tremolo = function(rate, intensity, stphase) {
       self._tremolo.intensity = intensity || 0.5;
       self._tremolo.stereoPhase = stphase || 0;
     }
+
+    self._setState('tremolo', [rate, intensity, stphase]);
   }
 
   return self;
