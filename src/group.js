@@ -41,6 +41,28 @@ function group() {
     });
     return self;
   };
+  
+  // apply different beat patterns to the tracks in the group
+  // e.g. group.beats([2, 4, 6], [6, 7, 8])
+  // track1 --> [2, 4, 6]
+  // track2 --> [6, 7, 8]
+  // track3 --> [2, 4, 6]
+  // and so on ...
+  self.beats = function () {
+    var args = Array.prototype.slice.call(arguments);
+    if(args.length > 0) {
+      var i = 0;
+      self.tracks.forEach( function (t) {
+        t.beat(args[i]);
+        i = (i + 1) % args.length;
+      });  
+    } else {
+      self.tracks.forEach( function (t) {
+        t.beat();
+      });  
+    }
+    return self;
+  }
 
 
   // =============================================================== `_in` stuff
