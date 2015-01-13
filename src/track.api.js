@@ -510,8 +510,8 @@ track.prototype.log = function() {
   return this;
 };
 
-// copy another track's properties into this track
-track.prototype.copy = function() {
+// merge another track's properties into this track
+track.prototype.merge = function() {
   var self = this;
   arguments = _parseArguments(arguments);
   arguments.forEach( function(item) {
