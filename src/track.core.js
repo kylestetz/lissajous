@@ -299,7 +299,7 @@ function track() {
     var self = this;
     if(args.length === 0 && self._state[fn]) {
       delete self._state[fn];
-    } else {
+    } else if(args.length > 0) {
       self._state[fn] = args;
     }
   };
