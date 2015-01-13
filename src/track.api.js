@@ -39,6 +39,7 @@ track.prototype.beat = function() {
   var self = this;
   var arguments = _parseArguments(arguments);
   self._beatPattern.set(arguments, 16);
+  self._setState('beat', arguments);
   return self;
 };
 
@@ -46,6 +47,7 @@ track.prototype.beat32 = function() {
   var self = this;
   var arguments = _parseArguments(arguments);
   self._beatPattern.set(arguments, 32);
+  self._setState('beat32', arguments);
   return self;
 };
 
@@ -57,12 +59,15 @@ track.prototype.notes = function() {
   if(arguments.length == 0) {
     self._currentNote = 64;
   }
+  self._setState('notes', arguments);
   return self;
 };
 
 track.prototype.nl = function() {
   var self = this;
   var arguments = _parseArguments(arguments);
+  self._setState('nl', arguments);
+
   var resolutionModifier = clock.bpmResolution / 16;
 
   function modify(arg) {
@@ -92,6 +97,8 @@ track.prototype.nl = function() {
 track.prototype.nl32 = function() {
   var self = this;
   var arguments = _parseArguments(arguments);
+  self._setState('nl32', arguments);
+
   self._noteLengthSequencer.set(arguments);
   if(arguments.length == 0) {
     // reasonable default -> nl = 16th note
@@ -117,7 +124,9 @@ track.prototype.trans = function(semitones) {
       };
     }
   }
-
+  // since state is order-independent we'll need to
+  // (re)set the `notes` state with absolute values.
+  self._setState('notes', self._notesSequencer.pattern);
   return self;
 };
 
@@ -138,6 +147,7 @@ track.prototype.pan = function() {
   if(arguments.length == 0) {
     self._panSequencer.set([0]);
   }
+  self._setState('pan', arguments);
   return self;
 };
 
@@ -150,6 +160,7 @@ track.prototype.sine = function() {
     self._oscTypeSequencer.set([]);
   }
   self._oscType = "sine";
+  self._setStateProperty('_oscType', "sine");
   return self;
 };
 
@@ -160,6 +171,7 @@ track.prototype.square = function() {
     self._oscTypeSequencer.set([]);
   }
   self._oscType = "square";
+  self._setStateProperty('_oscType', "square");
   return self;
 };
 
@@ -170,6 +182,7 @@ track.prototype.saw = function() {
     self._oscTypeSequencer.set([]);
   }
   self._oscType = "sawtooth";
+  self._setStateProperty('_oscType', "sawtooth");
   return self;
 };
 
@@ -180,6 +193,7 @@ track.prototype.tri = function() {
     self._oscTypeSequencer.set([]);
   }
   self._oscType = "triangle";
+  self._setStateProperty('_oscType', "triangle");
   return self;
 };
 
@@ -191,6 +205,7 @@ track.prototype.type = function() {
   if(arguments.length == 0) {
     self._oscType = "sine";
   }
+  self._setState('type', arguments);
   return self;
 };
 
@@ -203,6 +218,7 @@ track.prototype.vol = function() {
   if(arguments.length == 0) {
     self._volume = 0;
   }
+  self._setState('vol', arguments);
   return self;
 };
 
@@ -213,6 +229,7 @@ track.prototype.adsr = function() {
   var arguments = Array.prototype.slice.call(arguments);
   // arguments = _parseArguments(arguments);
   self._applyAdsrArguments(arguments, resolutionModifier);
+  self._setState('adsr', arguments);
   return self;
 };
 
@@ -223,6 +240,7 @@ track.prototype.adsr32 = function() {
   var arguments = Array.prototype.slice.call(arguments);
   // arguments = _parseArguments(arguments);
   self._applyAdsrArguments(arguments, resolutionModifier);
+  self._setState('adsr32', arguments);
   return self;
 };
 
@@ -289,6 +307,7 @@ track.prototype.sample = function() {
     self._currentSample = self._samples[0];
     self._editingSample = self._samples[0];
   }
+  self._setState('sample', arguments);
   return self;
 };
 
@@ -313,6 +332,7 @@ track.prototype.addsamples = function() {
   arguments.forEach( function(buffer) {
     self._samples.push( new Sample(buffer) );
   });
+  self._setState('addsamples', arguments);
   return self;
 };
 
@@ -321,6 +341,7 @@ track.prototype.select = function(index) {
   if(index < self._samples.length) {
     self._editingSample = self._samples[index];
   }
+  self._setStateProperty('_editingSample', arguments);
   return self;
 };
 
@@ -336,13 +357,14 @@ track.prototype.sseq = function() {
     }
   }
   self._currentSampleSequencer.set(arguments);
+  self._setState('sseq', arguments);
   return self;
 };
 
 track.prototype.clamp = function(start, end) {
   var self = this;
   if(self._editingSample) {
-    if(end == null) {
+    if(end === null) {
       self._editingSample.loopStart = (0);
       self._editingSample.loopEnd = (start || 1);
     } else {
@@ -350,6 +372,7 @@ track.prototype.clamp = function(start, end) {
       self._editingSample.loopEnd = (end || 1);
     }
   }
+  self._setState('clamp', arguments);
   return self;
 };
 
@@ -468,6 +491,7 @@ track.prototype.eval = function() {
   var self = this;
   arguments = _parseArguments(arguments);
   self._evalSequencer.set(arguments);
+  self._setState('eval', arguments);
   return self;
 };
 

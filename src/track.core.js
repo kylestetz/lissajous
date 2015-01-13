@@ -288,6 +288,38 @@ function track() {
     clock._removeTrackFromGroups(self);
   };
 
+  // ---------------------------------------------------            -    STATE    -
+  // ---------------------------------------------------            ---------------
+
+  // keep track of current state!
+  self._state = {};
+  self._stateProps = {};
+
+  self._setState = function(fn, args) {
+    var self = this;
+    if(args.length === 0 && self._state[fn]) {
+      delete self._state[fn];
+    } else {
+      self._state[fn] = args;
+    }
+  };
+
+  self._setStateProperty = function(prop, value) {
+    var self = this;
+    self._stateProps[prop] = value;
+  };
+
+  self._applyState = function(functionState, propertyState) {
+    // functions
+    for(var fn in functionState) {
+      self[fn].apply(self, functionState[fn]);
+    }
+    // properties
+    for(var prop in propertyState) {
+      self[prop] = propertyState[prop];
+    }
+  };
+
   // ---------------------------------------------------            - SOUND CHAIN -
   // ---------------------------------------------------            ---------------
 
