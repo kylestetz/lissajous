@@ -227,7 +227,7 @@ t1 = new track()
 t1.beat(5).notes(67).vol(0.5)
 t2 = new track()
 t2.beat(2).notes(44).pan(-1)
-t2.copy(t1)
+t2.merge(t1)
 // t2 now has beat(5), notes(67), vol(0.5), but retains pan(-1)
 ```
 
