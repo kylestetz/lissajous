@@ -19,6 +19,8 @@
 - [`track.type(types)`](https://github.com/kylestetz/lissajous/blob/master/API.md#tracktypetypes-sequencer)
 - [`track.adsr(attack, decay, sustain, release)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackadsrattack-decay-sustain-release-sequencer)
 - [`track.adsr32(attack, decay, sustain, release)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackadsr32attack-decay-sustain-release-sequencer)
+- [`track.sync(tracks)`](https://github.com/kylestetz/lissajous/blob/master/API.md#tracksynctracks)
+- [`track.merge(tracks)`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackmergetracks)
 - [`track.destroy()`](https://github.com/kylestetz/lissajous/blob/master/API.md#trackdestroy)
 
 Samples
@@ -61,6 +63,7 @@ Effects
 [**Groups API**](https://github.com/kylestetz/lissajous/blob/master/API.md#groups-api)
 - [`group.add`](https://github.com/kylestetz/lissajous/blob/master/API.md#groupaddtracks)
 - [`group.remove`](https://github.com/kylestetz/lissajous/blob/master/API.md#groupremovetracks)
+- [`group.sync()`](https://github.com/kylestetz/lissajous/blob/master/API.md#groupsync)
 
 [Generators](https://github.com/kylestetz/lissajous/blob/master/API.md#generators)
 - [`ri(min, max)`](https://github.com/kylestetz/lissajous/blob/master/API.md#rimin-max)
@@ -198,6 +201,49 @@ t.adsr([0,0,1,0], [1,1,0.5,0.1]) // alternate between two envelopes
 
 ### `track.adsr32(attack, decay, sustain, release)` `(sequencer)`
 Same as `track.adsr`, but `attack`, `decay`, and `sustain` are specified in 1/32nd notes.
+
+### `track.sync(tracks)`
+When two or more tracks aren't quite syncing up, it can be tedious (bordering on impossible) to `track.shift` them just right. `sync` accepts one or more other tracks and sets them all to the beginning of their respective beat patterns. They will all start over immediately, so there may still be a bit of timing involved if there are other things going on.
+
+Note that this only modifies the current location of the `beat` pattern, so any other sequences that were previously synced up the `beat` may be out of phase after `sync`.
+
+It does not matter which of the tracks you use to call the `sync` function.
+
+```javascript
+t1 = new track()
+t1.beat(9).notes(69).pan(-1)
+t2 = new track()
+t2.beat(7).notes(64).pan(1)
+// some time later...
+t1.sync(t2)
+// could also be run as `t2.sync(t1)`
+```
+
+### `track.merge(tracks)`
+Merge the state of one (or more!) tracks. Note that this will not sync the tracks.
+
+```javascript
+t1 = new track()
+t1.beat(5).notes(67).vol(0.5)
+t2 = new track()
+t2.beat(2).notes(44).pan(-1)
+t2.copy(t1)
+// t2 now has beat(5), notes(67), vol(0.5), but retains pan(-1)
+```
+
+Note that this can be used make an exact copy of a track if the caller is new (has no non-default properties).
+
+```javascript
+t1 = new track()
+t1.beat(5).notes(67).vol(0.5)
+t2 = new track()
+t2.merge(t1) // t2 is now identical to t1
+
+t3 = new track()
+t3.beat(6).vol(0.25).adsr(0,1,0,0)
+// in order to make t3 an exact copy of t1, we'll need to reset it first
+t3.destroy(), t3 = new track(), t3.copy(t1)
+```
 
 ### `track.destroy()`
 Removes the track from the clock, effectively shutting it off and allowing it to be safely deleted. This method also removes the track from any `group` objects that were referencing it.
@@ -529,6 +575,12 @@ Add one or more tracks to an existing group. Provide each track as an argument t
 ### `group.remove(tracks)`
 
 Remove one or more tracks to an existing group. Provide each track as an argument to `remove`.
+
+### `group.sync()`, `group.sync(tracks)`
+
+Runs `track.sync` on all tracks in the group, immediately starting them all from the beginning of their `beat` patterns.
+
+If other tracks are passed in, they will be synced in addition to all of the group's tracks.
 
 ## Generators
 
