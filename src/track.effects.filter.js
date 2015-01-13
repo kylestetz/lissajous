@@ -6,14 +6,24 @@ track.prototype._applyFilter = function(freq, res, amt, type) {
     self._filterFrequencySequencer.set([]);
     self._filterResSequencer.set([]);
     self._filterEnvAmtSequencer.set([]);
-  } else if(!freq && !res && !amt) {
+    self._setState('_applyFilter', []);
+    if(self._filterEffectEventId) {
+      self.filterEffectEventId = self._off('reset', self._filterEffectEventId);
+    }
+    return;
+  }
+  else if(!freq && !res && !amt) {
     // if the filter is on but another kind was called,
     // switch it. Is this the right behavior? dunno.
     if(self._filterIsActive && self._filterType !== type) {
       self._filterType = type;
-      return;
+      self._setFilterState();
     } else {
       self._filterIsActive = false;
+      self._filterFrequencySequencer.set([]);
+      self._filterResSequencer.set([]);
+      self._filterEnvAmtSequencer.set([]);
+      self._setState('_applyFilter', []);
     }
     return;
   }
@@ -21,13 +31,9 @@ track.prototype._applyFilter = function(freq, res, amt, type) {
     self._filterIsActive = true;
     self._filterType = type;
   }
-  self._filterFrequencySequencer.set([freq]);
-  self._filterResSequencer.set([res]);
-  self._filterEnvAmtSequencer.set([amt]);
-
-  if(self._filterEffectEventId) {
-    self._off('reset', self._filterEffectEventId);
-  }
+  self._filterFrequencySequencer.set(Array.isArray(freq) ? freq : [freq]);
+  self._filterResSequencer.set(Array.isArray(res) ? res : [res]);
+  self._filterEnvAmtSequencer.set(Array.isArray(amt) ? amt : [amt]);
 
   self._filterEffectEventId = generateId();
   self._once('reset', self._filterEffectEventId, function() {
@@ -35,6 +41,21 @@ track.prototype._applyFilter = function(freq, res, amt, type) {
     self._applyFilter();
   });
 
+  self._setFilterState();
+}
+
+track.prototype._setFilterState = function() {
+  var self = this;
+  self._setState('_applyFilter', [
+    self._filterFrequencySequencer.pattern,
+    self._filterResSequencer.pattern,
+    self._filterEnvAmtSequencer.pattern,
+    self._filterType
+  ]);
+  self._removeState('ffreq');
+  self._removeState('fres');
+  self._removeState('fenv');
+  self._removeState('famt');
 }
 
 // =============================================================
@@ -86,6 +107,12 @@ track.prototype.ffreq = function() {
   if(arguments.length == 0) {
     self._filterFrequency = 64;
   }
+
+  if(!self._filterIsActive) {
+    self._setState('ffreq', arguments);
+  } else {
+    self._setFilterState();
+  }
   return self;
 }
 
@@ -95,6 +122,12 @@ track.prototype.fres = function() {
   self._filterResSequencer.set(arguments);
   if(arguments.length == 0) {
     self._filterRes = 1;
+  }
+
+  if(!self._filterIsActive) {
+    self._setState('fres', arguments);
+  } else {
+    self._setFilterState();
   }
   return self;
 }
@@ -113,6 +146,12 @@ track.prototype.fenv = function() {
     self._filterEnvSustain = 1;
     self._filterEnvRelease = 0;
   }
+
+  if(!self._filterIsActive) {
+    self._setState('fenv', arguments);
+  } else {
+    self._setFilterState();
+  }
   return self;
 }
 
@@ -122,6 +161,12 @@ track.prototype.famt = function() {
   self._filterEnvAmtSequencer.set(arguments);
   if(arguments.length == 0) {
     self._filterEnvAmt = 0;
+  }
+
+  if(!self._filterIsActive) {
+    self._setState('famt', arguments);
+  } else {
+    self._setFilterState();
   }
   return self;
 }
