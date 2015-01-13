@@ -519,3 +519,17 @@ track.prototype.copy = function() {
   });
   return self;
 };
+
+track.prototype.sync = function() {
+  var self = this;
+  arguments = _parseArguments(arguments);
+
+  arguments.forEach( function(item) {
+    item._beatPattern.currentStep = 0;
+    item._beatPattern.untilNextBeat = 0;
+  });
+  self._beatPattern.currentStep = 0;
+  self._beatPattern.untilNextBeat = 0;
+
+  return self;
+};

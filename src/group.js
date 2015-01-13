@@ -41,7 +41,7 @@ function group() {
     });
     return self;
   };
-  
+
   // apply different beat patterns to the tracks in the group
   // e.g. group.beats([2, 4, 6], [6, 7, 8])
   // track1 --> [2, 4, 6]
@@ -55,14 +55,14 @@ function group() {
       self.tracks.forEach( function (t) {
         t.beat(args[i]);
         i = (i + 1) % args.length;
-      });  
+      });
     } else {
       self.tracks.forEach( function (t) {
         t.beat();
-      });  
+      });
     }
     return self;
-  }
+  };
 
 
   // =============================================================== `_in` stuff
@@ -163,3 +163,23 @@ function group() {
     };
   });
 })();
+
+// group has a different implementation of `sync`
+group.prototype.sync = function () {
+  var self = this;
+  var args = _parseArguments(arguments);
+
+  self.tracks.forEach( function (t) {
+    t._beatPattern.currentStep = 0;
+    t._beatPattern.untilNextBeat = 0;
+  });
+
+  // if tracks outside of this group were passed in,
+  // sync those up as well.
+  args.forEach( function (t) {
+    t._beatPattern.currentStep = 0;
+    t._beatPattern.untilNextBeat = 0;
+  });
+
+  return self;
+};
