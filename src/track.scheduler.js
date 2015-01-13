@@ -58,6 +58,12 @@ Scheduler.prototype.set = function(arguments, resolution) {
   self.currentStep = 0;
 }
 
+Scheduler.prototype.zero = function() {
+  var self = this;
+  self.currentStep = 0;
+  self.untilNextBeat = 0;
+}
+
 Scheduler.prototype.tick = function(nextTick) {
   var self = this;
   // the clock is telling us when the next note is. check if we have something to play:

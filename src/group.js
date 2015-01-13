@@ -170,15 +170,13 @@ group.prototype.sync = function () {
   var args = _parseArguments(arguments);
 
   self.tracks.forEach( function (t) {
-    t._beatPattern.currentStep = 0;
-    t._beatPattern.untilNextBeat = 0;
+    t._beatPattern.zero();
   });
 
   // if tracks outside of this group were passed in,
   // sync those up as well.
   args.forEach( function (t) {
-    t._beatPattern.currentStep = 0;
-    t._beatPattern.untilNextBeat = 0;
+    t._beatPattern.zero();
   });
 
   return self;

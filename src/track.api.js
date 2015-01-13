@@ -525,11 +525,9 @@ track.prototype.sync = function() {
   arguments = _parseArguments(arguments);
 
   arguments.forEach( function(item) {
-    item._beatPattern.currentStep = 0;
-    item._beatPattern.untilNextBeat = 0;
+    item._beatPattern.zero();
   });
-  self._beatPattern.currentStep = 0;
-  self._beatPattern.untilNextBeat = 0;
+  self._beatPattern.zero();
 
   return self;
 };
