@@ -8,7 +8,7 @@ track.prototype.delay = function(dtime, fb, level) {
       self._delayEffectIndex = self._removeFromChain(self._delayEffectIndex);
       // detach all sequencers
       self._detachSequencers( self._delayDtimeSequencer, self._delayFbSequencer, self._delayLevelSequencer );
-
+      self._setState('delay', []);
     }
   } else {
     if(self._delayEffectIndex == null) {
@@ -37,13 +37,26 @@ track.prototype.delay = function(dtime, fb, level) {
       self._once('reset', self._delayEffectIndex, function() {
         self.delay();
       });
-    } else {
-      self._delayDtimeSequencer.set(dtime);
-      self._delayFbSequencer.set(fb || 0.25);
-      self._delayLevelSequencer.set(level || 0.5);
     }
+
+    self._delayDtimeSequencer.set([dtime]);
+    self._delayFbSequencer.set([fb || 0.25]);
+    self._delayLevelSequencer.set([level || 0.5]);
+    self._setDelayState();
   }
   return self;
+}
+
+track.prototype._setDelayState = function() {
+  var self = this;
+  self._setState('delay', [
+    self._delayDtimeSequencer.pattern,
+    self._delayFbSequencer.pattern,
+    self._delayLevelSequencer.pattern
+  ]);
+  self._removeState('dtime');
+  self._removeState('dfb');
+  self._removeState('dlevel');
 }
 
 track.prototype.dtime = function() {
@@ -55,6 +68,12 @@ track.prototype.dtime = function() {
     } else {
       self._delayDtimeSequencer.set(arguments);
     }
+  }
+
+  if(self._delayEffectIndex) {
+    self._setDelayState();
+  } else {
+    self._setState('dtime', arguments);
   }
   return self;
 }
@@ -69,6 +88,12 @@ track.prototype.dfb = function() {
       self._delayFbSequencer.set(arguments);
     }
   }
+
+  if(self._delayEffectIndex) {
+    self._setDelayState();
+  } else {
+    self._setState('dfb', arguments);
+  }
   return self;
 }
 
@@ -81,6 +106,12 @@ track.prototype.dlevel = function(level) {
     } else {
       self._delayLevelSequencer.set(arguments);
     }
+  }
+
+  if(self._delayEffectIndex) {
+    self._setDelayState();
+  } else {
+    self._setState('dlevel', arguments);
   }
   return self;
 }
