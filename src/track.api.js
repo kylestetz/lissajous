@@ -509,3 +509,13 @@ track.prototype.log = function() {
   console.log(arguments);
   return this;
 };
+
+// copy another track's properties into this track
+track.prototype.copy = function() {
+  var self = this;
+  arguments = _parseArguments(arguments);
+  arguments.forEach( function(item) {
+    self._applyState(item._state, item._stateProps);
+  });
+  return self;
+};
