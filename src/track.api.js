@@ -364,12 +364,12 @@ track.prototype.sseq = function() {
 track.prototype.clamp = function(start, end) {
   var self = this;
   if(self._editingSample) {
-    if(end === null) {
-      self._editingSample.loopStart = (0);
-      self._editingSample.loopEnd = (start || 1);
+    if(end === undefined) {
+      self._editingSample.loopStart = 0;
+      self._editingSample.loopEnd = start;
     } else {
-      self._editingSample.loopStart = (start || 0);
-      self._editingSample.loopEnd = (end || 1);
+      self._editingSample.loopStart = start;
+      self._editingSample.loopEnd = end;
     }
   }
   self._setState('clamp', arguments);
