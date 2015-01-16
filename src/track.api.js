@@ -364,7 +364,11 @@ track.prototype.sseq = function() {
 track.prototype.clamp = function(start, end) {
   var self = this;
   if(self._editingSample) {
-    if(end === undefined) {
+    if(arguments.length === 0) {
+      self._editingSample.loopStart = 0;
+      self._editingSample.loopEnd = 1;
+    }
+    else if(end === undefined) {
       self._editingSample.loopStart = 0;
       self._editingSample.loopEnd = start;
     } else {
@@ -372,7 +376,7 @@ track.prototype.clamp = function(start, end) {
       self._editingSample.loopEnd = end;
     }
   }
-  self._setState('clamp', arguments);
+  // self._setState('clamp', arguments);
   return self;
 };
 
@@ -382,6 +386,7 @@ track.prototype.cs = track.prototype.clshift = function() {
     var arguments = _parseArguments(arguments);
     self._editingSample.clampShiftSequencer.set(arguments);
   }
+  // self._setState('cs', arguments);
   return self;
 };
 
