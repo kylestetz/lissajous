@@ -78,6 +78,19 @@ function choice() {
   };
 }
 
+function _e() {
+  if(!arguments.length) return function() { return 0; };
+  var items = _parseArguments(arguments[0]);
+  var expandBy = arguments[1];
+  var targetArray = [];
+  for(var i = 0; i < items.length; i++) {
+    for(var j = 0; j < expandBy; j++) {
+      targetArray.push(items[i]);
+    }
+  }
+  return targetArray;
+}
+
 // ============================================================
 // WALK
 // ============================================================
