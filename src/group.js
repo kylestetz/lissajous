@@ -124,15 +124,15 @@ function group() {
       });
       return inSelf;
     };
-
-    // when `in` is called, break out of the `_in` queue
-    // and create a new instance of `_in` on the track
-    // with the combined time.
-    self._in.prototype['in'] = function(count) {
-      var inSelf = this;
-      return self.in(count + inSelf.count);
-    };
   });
+
+  // when `in` is called, break out of the `_in` queue
+  // and create a new instance of `_in` on the track
+  // with the combined time.
+  self._in.prototype['in'] = function(count) {
+    var inSelf = this;
+    return self.in(count + inSelf.count);
+  };
 
   // =============================================================== `_in` stuff
 
