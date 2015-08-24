@@ -158,10 +158,11 @@ function group() {
       });
       return self;
     };
-    group.prototype['in'] = function(count) {
-      return new this._in(count);
-    };
   });
+
+  group.prototype['in'] = function(count) {
+    return new this._in(count);
+  };
 })();
 
 // group has a different implementation of `sync`
