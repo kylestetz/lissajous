@@ -6,7 +6,7 @@ Lissajous is a tool for real time audio performance using Javascript. It wraps s
 
 Lissajous exists entirely within the Javascript console & was designed for use with Google Chrome or Firefox.
 
-#### [Play with Lissajous](http://lissajousjs.com)
+#### [Play with Lissajous](http://lissajous.kylestetz.com)
 Requires the latest stable Chrome or Firefox build & a relatively recent OS. If you have your own .wav files you can drop them in the window to load them into the environment!
 
 #### Watch a few demo videos
